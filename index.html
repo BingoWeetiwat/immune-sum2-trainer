@@ -122,10 +122,19 @@
     <p class="note">Progress syncs through a <b>private GitHub Gist</b>. Paste a token
       once on each device. It is stored only in this browser and is never sent
       anywhere except <code>api.github.com</code>.</p>
+    <p class="warn-box">⚠ It <b>must be a “classic” token with the <code>gist</code> box ticked</b>.
+      <b>Fine-grained tokens do not work</b> — GitHub's Gist API does not accept them,
+      and no combination of repository permissions will help.</p>
     <ol class="steps">
-      <li>Open <b>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</b></li>
-      <li><b>Generate new token (classic)</b>, tick only the <b>gist</b> scope, set no expiry (or 90 days)</li>
-      <li>Copy it and paste below — then tap <b>Connect</b></li>
+      <li>Go to <b>github.com → Settings → Developer settings → Personal access tokens → <u>Tokens (classic)</u></b>
+        <br><small>Not “Fine-grained tokens”. The direct link is
+        <code>github.com/settings/tokens/new</code></small></li>
+      <li>Click <b>Generate new token</b> → <b>Generate new token (classic)</b></li>
+      <li>Note: anything. Expiration: <b>No expiration</b></li>
+      <li><b>Tick the single checkbox labelled <code>gist</code></b> — “Create gists”.
+        <br><small>Do <b>not</b> use the “general use” preset; it leaves <code>gist</code> unticked.
+        You do not need <code>repo</code> or anything else.</small></li>
+      <li><b>Generate token</b>, copy the <code>ghp_…</code> value, paste it below → <b>Connect</b></li>
     </ol>
     <input type="password" id="tok" placeholder="ghp_… paste token here" autocomplete="off" spellcheck="false">
     <div class="sync-row">

@@ -18,5 +18,9 @@ It then launches fullscreen with its own icon and works with no internet.
 
 ## Cross-device sync
 Progress merges question-by-question through a **private GitHub Gist**.
-Tap **☁ Sync setup** and paste a token with the `gist` scope — once per device.
-The token is stored only in that browser's localStorage and is never committed here.
+Tap **☁ Sync setup** and paste a token — once per device. The token is stored
+only in that browser's localStorage and is never committed here.
+
+> ⚠️ **The token must be a “classic” token with the `gist` scope ticked.**
+> **Fine-grained tokens do not work** — GitHub's Gist API does not accept them.
+> Create one at <https://github.com/settings/tokens/new> and tick only `gist`.

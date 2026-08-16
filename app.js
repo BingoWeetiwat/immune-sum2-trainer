@@ -616,8 +616,53 @@ function gh(path, opt) {
     'X-GitHub-Api-Version': '2022-11-28'
   }, opt.headers || {});
   return fetch('https://api.github.com' + path, opt).then(function (r) {
-    if (!r.ok) throw new Error('GitHub ' + r.status);
-    return r.json();
+    if (r.ok) return r.json();
+    /* surface GitHub's own message — a bare status code is useless to debug */
+    return r.json().catch(function () { return {}; }).then(function (j) {
+      var msg = j.message || ('HTTP ' + r.status);
+      if (r.status === 403 || r.status === 404) {
+        msg += ' — the token is missing the "gist" scope, or it is a ' +
+               'fine-grained token (those cannot access gists at all).';
+      } else if (r.status === 401) {
+        msg += ' — token rejected; it may be mistyped, expired or revoked.';
+      }
+      var e = new Error(msg);
+      e.status = r.status;
+      throw e;
+    });
+  });
+}
+
+/* Check the token BEFORE doing anything with it, so the failure message is
+   specific instead of a mystery 403 halfway through a sync. */
+function validateToken(t) {
+  if (/^github_pat_/.test(t)) {
+    return Promise.resolve({ ok: false, msg:
+      'That is a fine-grained token. GitHub\'s Gist API does not support ' +
+      'fine-grained tokens at all — you need a CLASSIC token with the "gist" scope.' });
+  }
+  return fetch('https://api.github.com/user', {
+    headers: { 'Authorization': 'Bearer ' + t, 'Accept': 'application/vnd.github+json' }
+  }).then(function (r) {
+    if (r.status === 401) {
+      return { ok: false, msg: 'Token rejected (401). Check you pasted the whole thing, and that it has not expired.' };
+    }
+    if (!r.ok) return { ok: false, msg: 'GitHub returned ' + r.status + ' when checking the token.' };
+    var scopes = r.headers.get('x-oauth-scopes');
+    if (scopes === null) {
+      return { ok: false, msg:
+        'GitHub reports no scopes for this token, which means it is fine-grained. ' +
+        'Gists need a CLASSIC token with the "gist" scope.' };
+    }
+    var list = scopes.split(/,\s*/).filter(Boolean);
+    if (list.indexOf('gist') < 0) {
+      return { ok: false, msg:
+        'This token has no "gist" scope. It has: ' + (list.join(', ') || 'no scopes') +
+        '. Regenerate a classic token and tick the "gist" checkbox.' };
+    }
+    return r.json().then(function (u) { return { ok: true, login: u.login, scopes: list.join(', ') }; });
+  }).catch(function (e) {
+    return { ok: false, msg: 'Could not reach GitHub: ' + e.message };
   });
 }
 
@@ -668,8 +713,9 @@ function pull(quiet) {
       scheduleSync();
     });
   }).catch(function (e) {
-    setStatus('Pull failed: ' + e.message, 'bad');
-    if (!quiet) toast('Sync failed — check the token');
+    setStatus('Pull failed — ' + e.message, 'bad');
+    if (!quiet) toast('Sync failed — see the message in Sync setup');
+    return false;
   });
 }
 
@@ -683,7 +729,7 @@ function push(quiet) {
   }).then(function () {
     setStatus('Synced ' + (new Date()).toLocaleTimeString(), 'good');
   }).catch(function (e) {
-    setStatus('Push failed: ' + e.message, 'bad');
+    setStatus('Push failed — ' + e.message, 'bad');
   }).then(function () { syncing = false; });
 }
 
@@ -701,10 +747,19 @@ $('#btn-sync').addEventListener('click', function () {
 $('#btn-connect').addEventListener('click', function () {
   var v = $('#tok').value.trim();
   if (!v || v.indexOf('•') === 0) { setStatus('Paste a token first.', 'bad'); return; }
-  localStorage.setItem(LS_TOK, v);
-  localStorage.removeItem(LS_GIST);
-  setStatus('Connecting…');
-  pull(false).then(function () { return push(true); });
+  setStatus('Checking token…');
+  validateToken(v).then(function (res) {
+    if (!res.ok) { setStatus('✗ ' + res.msg, 'bad'); return; }
+    localStorage.setItem(LS_TOK, v);
+    localStorage.removeItem(LS_GIST);
+    setStatus('Token OK for @' + res.login + ' — syncing…');
+    /* sequential, and stop on the first failure so the real error is not
+       masked by a second one */
+    return pull(false).then(function (okPull) {
+      if (okPull === false) return;
+      return push(false);
+    });
+  });
 });
 $('#btn-pull').addEventListener('click', function () { setStatus('Pulling…'); pull(false); });
 $('#btn-push').addEventListener('click', function () { setStatus('Pushing…'); push(false); });
