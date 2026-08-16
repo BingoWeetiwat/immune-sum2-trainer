@@ -2,7 +2,7 @@
 
 Installable offline trainer for **Human Immune System Summative II (BM33, L10–L19)**.
 
-**Live app → https://bm33official.github.io/immune-sum2-trainer/**
+**Live app → https://bingoweetiwat.github.io/immune-sum2-trainer/**
 
 264 items: 204 past-paper questions (189 MCQ + 15 written) from BM32, BM31, BM30,
 BM29, BM28 and the AX legacy bank, plus 60 author-made drill questions kept in a
