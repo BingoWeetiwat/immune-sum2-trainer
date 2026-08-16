@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Immune Sum II</title>
+<meta name="description" content="Immune Summative II past-paper trainer — BM33 L10-L19">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Immune II">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div id="boot" class="boot"><div class="boot-ring"></div><p>Loading question bank…</p></div>
+
+<!-- ────────────────────────────────────────────────────── HOME -->
+<section id="home" class="screen">
+  <header class="home-head">
+    <div class="home-title">
+      <h1>Immune <span>Summative II</span></h1>
+      <p class="sub">BM33 · L10–L19 · past-paper trainer</p>
+    </div>
+    <button class="icon-btn" id="btn-theme" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <div class="ring-card">
+    <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+      <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>
+    </svg>
+    <div class="ring-mid">
+      <b id="ring-pct">0%</b>
+      <small id="ring-sub">not started</small>
+    </div>
+    <div class="ring-stats">
+      <div><b id="st-done">0</b><small>answered</small></div>
+      <div><b id="st-corr">0</b><small>correct</small></div>
+      <div><b id="st-star">0</b><small>starred</small></div>
+    </div>
+  </div>
+
+  <nav class="modes" id="modes"></nav>
+
+  <div class="home-foot">
+    <button class="ghost" id="btn-sync">☁ Sync setup</button>
+    <button class="ghost" id="btn-about">About &amp; reset</button>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── PICKER -->
+<section id="picker" class="screen">
+  <header class="bar">
+    <button class="icon-btn" data-back>‹</button>
+    <h2 id="picker-title">Choose</h2>
+    <span class="sp"></span>
+  </header>
+  <div class="picker-list" id="picker-list"></div>
+</section>
+
+<!-- ────────────────────────────────────────────────── SESSION -->
+<section id="quiz" class="screen">
+  <header class="bar quiz-bar">
+    <button class="icon-btn" data-back>‹</button>
+    <div class="bar-mid">
+      <b id="q-section">—</b>
+      <small id="q-count">—</small>
+    </div>
+    <button class="icon-btn star-btn" id="btn-star" aria-label="Star this question">☆</button>
+    <button class="icon-btn" id="btn-grid" aria-label="Question grid">⠿</button>
+  </header>
+
+  <div class="timerline">
+    <span id="t-q">0:00</span>
+    <div class="prog"><i id="prog-fill"></i></div>
+    <span id="t-total">0:00</span>
+  </div>
+
+  <main class="stage" id="stage"></main>
+
+  <footer class="navbar">
+    <button class="nav" id="btn-prev">‹ Prev</button>
+    <button class="nav" id="btn-reveal">Show answer</button>
+    <button class="nav primary" id="btn-next">Next ›</button>
+  </footer>
+</section>
+
+<!-- ──────────────────────────────────────────────────── STATS -->
+<section id="stats" class="screen">
+  <header class="bar">
+    <button class="icon-btn" data-back>‹</button>
+    <h2>Stats</h2>
+    <span class="sp"></span>
+  </header>
+  <div class="stats-body" id="stats-body"></div>
+</section>
+
+<!-- ───────────────────────────────────────────────── OVERLAYS -->
+<div class="sheet" id="sheet-grid">
+  <div class="sheet-inner">
+    <div class="grab"></div>
+    <h3>Jump to question</h3>
+    <div class="legend">
+      <span><i class="sw ok"></i>correct</span>
+      <span><i class="sw no"></i>wrong</span>
+      <span><i class="sw seen"></i>seen</span>
+      <span><i class="sw st"></i>starred</span>
+    </div>
+    <div class="qgrid" id="qgrid"></div>
+  </div>
+</div>
+
+<div class="sheet" id="sheet-sync">
+  <div class="sheet-inner">
+    <div class="grab"></div>
+    <h3>☁ Cross-device sync</h3>
+    <p class="note">Progress syncs through a <b>private GitHub Gist</b>. Paste a token
+      once on each device. It is stored only in this browser and is never sent
+      anywhere except <code>api.github.com</code>.</p>
+    <ol class="steps">
+      <li>Open <b>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</b></li>
+      <li><b>Generate new token (classic)</b>, tick only the <b>gist</b> scope, set no expiry (or 90 days)</li>
+      <li>Copy it and paste below — then tap <b>Connect</b></li>
+    </ol>
+    <input type="password" id="tok" placeholder="ghp_… paste token here" autocomplete="off" spellcheck="false">
+    <div class="sync-row">
+      <button class="primary" id="btn-connect">Connect</button>
+      <button class="ghost" id="btn-pull">↓ Pull now</button>
+      <button class="ghost" id="btn-push">↑ Push now</button>
+    </div>
+    <p class="sync-status" id="sync-status">Not connected — progress is saved on this device only.</p>
+    <button class="ghost danger" id="btn-forget">Forget token on this device</button>
+  </div>
+</div>
+
+<div class="sheet" id="sheet-about">
+  <div class="sheet-inner">
+    <div class="grab"></div>
+    <h3>About</h3>
+    <p class="note" id="about-body"></p>
+    <button class="ghost danger" id="btn-reset">Reset all progress on this device</button>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lb-img" alt="Source slide"><button class="lb-close">✕</button></div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="slidelist.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
