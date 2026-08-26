@@ -1,7 +1,7 @@
 {
-  "name": "Immune Summative II Trainer",
-  "short_name": "Immune II",
-  "description": "Past-paper trainer for Human Immune System Summative II (BM33 L10-L19)",
+  "name": "BM33 Past-Paper Trainer",
+  "short_name": "BM33",
+  "description": "Past-paper trainers for BM33 — Immune Summative II (L10-L19) and Pharmacology Summative I (L1-L7)",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

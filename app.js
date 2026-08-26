@@ -4,14 +4,45 @@
 (function () {
 'use strict';
 
-var BANK = window.BANK || [], META = window.META || {};
 var $ = function (s, r) { return (r || document).querySelector(s); };
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-var byId = {};
-BANK.forEach(function (q) { byId[q.id] = q; });
 
-var PAST = BANK.filter(function (q) { return q.src === 'past'; });
-var AUTH = BANK.filter(function (q) { return q.src === 'author'; });
+/* ═══════════════════════════════════════════════ blocks
+   Two subjects live in one app. Their question ids are namespaced at BUILD
+   time (pharmaco ids all start "P|"), so a single flat progress map — and a
+   single synced gist — holds both without any chance of collision, and the
+   immune progress that already exists on the device keeps working untouched. */
+var BLOCKS = [
+  { key: 'isum2',  short: 'Immune II',   h1: 'Immune <span>Summative II</span>',
+    sub: 'BM33 · L10–L19 · past-paper trainer',
+    bank: window.BANK   || [], meta: window.META   || {} },
+  { key: 'pharm1', short: 'Pharmaco I',  h1: 'Pharmaco <span>Summative I</span>',
+    sub: 'BM33 · L1–L7 · past-paper trainer',
+    bank: window.BANK_P || [], meta: window.META_P || {} }
+];
+var BLOCK_BY = {};
+BLOCKS.forEach(function (b) {
+  BLOCK_BY[b.key] = b;
+  b.byId = {};
+  b.bank.forEach(function (q) { b.byId[q.id] = q; });
+  b.past = b.bank.filter(function (q) { return q.src === 'past'; });
+  b.auth = b.bank.filter(function (q) { return q.src === 'author'; });
+});
+/* every id across every block — sync must never drop the other block's rows */
+var byIdAll = {};
+BLOCKS.forEach(function (b) {
+  Object.keys(b.byId).forEach(function (id) { byIdAll[id] = b.byId[id]; });
+});
+
+var B = BLOCKS[0];                       /* active block, set by setBlock() */
+var BANK = B.bank, META = B.meta, byId = B.byId, PAST = B.past, AUTH = B.auth;
+function setBlock(key) {
+  var nb = BLOCK_BY[key];
+  if (!nb || !nb.bank.length) return false;
+  B = nb;
+  BANK = B.bank; META = B.meta; byId = B.byId; PAST = B.past; AUTH = B.auth;
+  return true;
+}
 
 /* ═════════════════════════════════════════════════ storage */
 var LS_PROG = 'isum2.progress', LS_META = 'isum2.meta',
@@ -149,7 +180,7 @@ function statsOf(list) {
 /* ═════════════════════════════════════════════════ home */
 var MODES = [
   { id: 'year', em: '📅', t: 'By year', d: 'Each paper faithfully, newest first' },
-  { id: 'lec', em: '📚', t: 'By lecture', d: '12 BM33 buckets, L10 → L19' },
+  { id: 'lec', em: '📚', t: 'By lecture', d: '' },
   { id: 'star', em: '⭐', t: 'Starred review', d: 'Everything you flagged, grouped by lecture' },
   { id: 'wrong', em: '🔁', t: 'Wrong-answer drill', d: 'Auto-collected, re-served until right' },
   { id: 'shuffle', em: '🎲', t: 'Shuffle practice', d: 'Random mix across every paper' },
@@ -158,7 +189,29 @@ var MODES = [
   { id: 'stats', em: '📊', t: 'Stats', d: 'Per-paper and per-lecture breakdown' }
 ];
 
+function renderBlockTabs() {
+  var n = $('#blocktabs');
+  var live = BLOCKS.filter(function (b) { return b.bank.length; });
+  if (live.length < 2) { n.style.display = 'none'; return; }
+  n.innerHTML = live.map(function (b) {
+    return '<button class="btab' + (b.key === B.key ? ' on' : '') +
+      '" data-b="' + b.key + '" role="tab">' + esc(b.short) + '</button>';
+  }).join('');
+  $$('.btab', n).forEach(function (t) {
+    t.addEventListener('click', function () {
+      if (t.dataset.b === B.key) return;
+      if (!setBlock(t.dataset.b)) return;
+      pmeta.block = B.key; persist(false); haptic();
+      $('#modes').dataset.built = '';        /* blurbs differ per block */
+      renderHome();
+    });
+  });
+}
+
 function renderHome() {
+  $('#home-h1').innerHTML = B.h1;
+  $('#home-sub').textContent = B.sub;
+  renderBlockTabs();
   var s = statsOf(PAST);
   var sa = statsOf(AUTH);
   var doneAll = s.done + sa.done, okAll = s.ok + sa.ok, totAll = BANK.length;
@@ -176,6 +229,9 @@ function renderHome() {
     return;
   }
   n.dataset.built = '1';
+  MODES.forEach(function (m) {
+    if (m.id === 'lec') m.d = META.lecBlurb || (META.lecOrder || []).length + ' lecture buckets';
+  });
   n.innerHTML = MODES.map(function (m, i) {
     return '<button class="mode ' + (m.cls || '') + '" data-mode="' + m.id + '" ' +
       'style="animation-delay:' + (i * 38) + 'ms">' +
@@ -381,7 +437,7 @@ function renderQ() {
     h += '</div>';
   }
 
-  h += '<div class="reveal" id="reveal">';
+  h += '<div class="reveal" id="reveal"><div class="rvin">';
   if (q.k === 'written') {
     h += '<div class="answer"><span class="lbl">Model answer</span>' + q.ans + '</div>';
   }
@@ -390,9 +446,9 @@ function renderQ() {
   if (q.img) {
     h += '<div class="slidewrap"><div class="cap">Source slide — ' + esc(lecFull(q.lec)) +
       ' · slide ' + q.sl + ' (tap to zoom)</div>' +
-      '<img src="' + q.img + '" alt="Source slide" loading="lazy" id="slideimg"></div>';
+      '<img src="' + q.img + '" alt="Source slide" decoding="async" id="slideimg"></div>';
   }
-  h += '</div></div>';
+  h += '</div></div></div>';
 
   var stage = $('#stage');
   stage.innerHTML = h;
@@ -404,6 +460,11 @@ function renderQ() {
     });
   }
   var img = $('#slideimg');
+  if (img) {
+    /* decode it now, while the question is being read — otherwise the reveal
+       has to wait on a fetch and then jolt as the image settles its height */
+    if (img.decode) img.decode().catch(function () {});
+  }
   if (img) img.addEventListener('click', function () {
     $('#lb-img').src = img.src; $('#lightbox').classList.add('on');
   });
@@ -455,11 +516,11 @@ function lockIn(chosen, animate) {
     if (animate && k === chosen) b.classList.add('flash');
     var r = $('.reason[data-r="' + k + '"]');
     if (r) {
-      if (animate) setTimeout(function () { r.classList.add('show'); }, 60 + 45 * ' ABCDE'.indexOf(k));
+      if (animate) setTimeout(function () { r.classList.add('show'); }, 16 * Math.max(0, ' ABCDE'.indexOf(k) - 1));
       else r.classList.add('show');
     }
   });
-  if (animate) setTimeout(doReveal, 260); else doReveal();
+  if (animate) setTimeout(doReveal, 95); else doReveal();
 }
 function doReveal() {
   var el = $('#reveal');
@@ -670,7 +731,7 @@ function validateToken(t) {
 function merge(remote) {
   var changed = 0;
   Object.keys(remote || {}).forEach(function (id) {
-    if (!byId[id]) return;
+    if (!byIdAll[id]) return;
     var r = remote[id], l = prog[id];
     if (!l || (r.ts || 0) > (l.ts || 0)) { prog[id] = r; changed++; }
   });
@@ -776,28 +837,33 @@ document.addEventListener('visibilitychange', function () {
 
 /* ═════════════════════════════════════════════════ about */
 $('#btn-about').addEventListener('click', function () {
-  var s = statsOf(PAST);
+  var mcq = PAST.filter(function (q) { return q.k === 'mcq'; }).length;
+  var wri = PAST.filter(function (q) { return q.k === 'written'; }).length;
   $('#about-body').innerHTML =
-    '<b>Immune Summative II — past-paper trainer</b><br>' +
-    PAST.length + ' past-paper items (' +
-    PAST.filter(function (q) { return q.k === 'mcq'; }).length + ' MCQ + ' +
-    PAST.filter(function (q) { return q.k === 'written'; }).length + ' written) from ' +
-    'BM32 · BM31 · BM30 · BM29 · BM28 · AX, plus ' + AUTH.length +
-    ' author-made drill items.<br><br>' +
-    'Every answer is verified against the <b>BM33 L10–L19</b> lecture decks and ' +
-    'standard immunology — not copied from student keys. Where a key looked wrong ' +
-    'it is corrected openly (⚠).<br><br>' +
+    '<b>' + esc(META.aboutTitle || '') + '</b><br>' +
+    PAST.length + ' past-paper items (' + mcq + ' MCQ' +
+    (wri ? ' + ' + wri + ' written' : '') + ') from ' +
+    (META.yearOrder || []).map(function (y) {
+      return esc((META.yearMeta[y] || [y])[0]);
+    }).join(' · ') +
+    ', plus ' + AUTH.length + ' author-made drill items.<br><br>' +
+    (META.aboutBody || '') + '<br><br>' +
     'Works fully offline once installed. Progress is stored on this device and, ' +
-    'if you connect a token, merged across devices through a private GitHub Gist.';
+    'if you connect a token, merged across devices through a private GitHub Gist. ' +
+    'Both blocks share one token and one gist.';
   openSheet('sheet-about');
 });
 $('#btn-reset').addEventListener('click', function () {
-  if (!confirm('Erase all answers, stars and timings on this device?')) return;
-  prog = {}; saveJSON(LS_PROG, prog);
-  renderHome(); closeSheet('sheet-about'); toast('Progress reset');
+  if (!confirm('Erase all answers, stars and timings for ' + B.short +
+               ' on this device?\n\nThe other block is not touched.')) return;
+  Object.keys(byId).forEach(function (id) { delete prog[id]; });
+  saveJSON(LS_PROG, prog); scheduleSync();
+  renderHome(); closeSheet('sheet-about'); toast(B.short + ' progress reset');
 });
 
 /* ═════════════════════════════════════════════════ boot */
+if (pmeta.block) setBlock(pmeta.block);
+if (!B.bank.length) { BLOCKS.some(function (b) { return setBlock(b.key); }); }
 renderHome();
 setTimeout(function () { $('#boot').classList.add('gone'); }, 220);
 if (tok()) pull(true);

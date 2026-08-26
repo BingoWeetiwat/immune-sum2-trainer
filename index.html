@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>Immune Sum II</title>
-<meta name="description" content="Immune Summative II past-paper trainer — BM33 L10-L19">
+<title>BM33 Trainer</title>
+<meta name="description" content="BM33 past-paper trainer — Immune Summative II and Pharmacology Summative I">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Immune II">
+<meta name="apple-mobile-web-app-title" content="BM33">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="app.css">
@@ -23,11 +23,13 @@
 <section id="home" class="screen">
   <header class="home-head">
     <div class="home-title">
-      <h1>Immune <span>Summative II</span></h1>
-      <p class="sub">BM33 · L10–L19 · past-paper trainer</p>
+      <h1 id="home-h1">Immune <span>Summative II</span></h1>
+      <p class="sub" id="home-sub">BM33 · L10–L19 · past-paper trainer</p>
     </div>
     <button class="icon-btn" id="btn-theme" aria-label="Toggle theme">◐</button>
   </header>
+
+  <nav class="blocktabs" id="blocktabs" role="tablist"></nav>
 
   <div class="ring-card">
     <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
@@ -160,7 +162,9 @@
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="data_pharm.js"></script>
 <script src="slidelist.js"></script>
+<script src="slidelist_p.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

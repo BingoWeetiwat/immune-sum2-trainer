@@ -8,6 +8,7 @@
   --star:#ffc44d; --author:#c084fc;
   --r:16px; --r-sm:11px;
   --ease:cubic-bezier(.32,.72,0,1);
+  --pop:cubic-bezier(.2,.9,.25,1);
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
 }
@@ -62,6 +63,16 @@ input{font:inherit}
   border:1px solid var(--line);display:grid;place-content:center;font-size:17px;
   flex:0 0 auto;transition:transform .14s var(--ease),background .2s}
 .icon-btn:active{transform:scale(.9);background:var(--card2)}
+
+/* ───────────────────────────────────── block switcher */
+.blocktabs{display:flex;gap:4px;margin:2px 16px 0;padding:4px;
+  background:var(--card);border:1px solid var(--line);border-radius:99px}
+.btab{flex:1;padding:9px 10px;border-radius:99px;font-size:13.5px;font-weight:600;
+  color:var(--dim);letter-spacing:-.1px;
+  transition:color .18s var(--pop),background .18s var(--pop),transform .13s var(--pop)}
+.btab:active{transform:scale(.97)}
+.btab.on{background:var(--acc);color:#04121c}
+:root[data-theme="light"] .btab.on{color:#fff}
 
 .ring-card{margin:16px 16px 4px;padding:18px;background:var(--card);
   border:1px solid var(--line);border-radius:var(--r);
@@ -173,19 +184,35 @@ input{font:inherit}
 .opt.chosen-wrong{border-color:var(--no);background:var(--no-bg)}
 .opt.chosen-wrong .k{color:var(--no)}
 .opt.locked{cursor:default}
-.opt.flash{animation:flash .5s var(--ease)}
+.opt.flash{animation:flash .32s var(--pop)}
 @keyframes flash{0%{transform:scale(1)}40%{transform:scale(1.022)}100%{transform:scale(1)}}
 
-.reason{overflow:hidden;max-height:0;opacity:0;
-  transition:max-height .45s var(--ease),opacity .3s ease .08s,margin .45s var(--ease)}
-.reason.show{max-height:420px;opacity:1;margin:-2px 0 2px}
-.reason .rin{font-size:13px;line-height:1.55;color:var(--dim);
+/* Option explanations.
+   These used to animate `max-height:0 -> 420px`, but the real content is only
+   ~70px tall, so the transition went on running for most of its 450ms after the
+   motion had already stopped — and it did that for five options at once while
+   the (5200px) reveal block animated alongside, reflowing the whole document
+   every frame. `grid-template-rows: 0fr -> 1fr` resolves to the element's ACTUAL
+   height, so the duration is the motion: exact, short and snappy. Browsers that
+   cannot tween it simply snap open, which is a fine degradation here. */
+.reason{display:grid;grid-template-rows:0fr;contain:layout;
+  transition:grid-template-rows .17s var(--pop),margin .17s var(--pop)}
+.reason>.rin{overflow:hidden;min-height:0;
+  opacity:0;transform:translateY(-3px);
+  transition:opacity .12s linear,transform .17s var(--pop)}
+.reason.show{grid-template-rows:1fr;margin:-2px 0 2px}
+.reason.show>.rin{opacity:1;transform:none}
+.rin{font-size:13px;line-height:1.55;color:var(--dim);
   padding:9px 13px 3px 41px}
 .opt.correct + .reason .rin{color:var(--ink)}
 
-.reveal{overflow:hidden;max-height:0;opacity:0;
-  transition:max-height .6s var(--ease),opacity .35s ease .1s}
-.reveal.show{max-height:5200px;opacity:1}
+.reveal{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .22s var(--pop)}
+.reveal>.rvin{overflow:hidden;min-height:0;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .17s linear,transform .22s var(--pop)}
+.reveal.show{grid-template-rows:1fr}
+.reveal.show>.rvin{opacity:1;transform:none}
 
 .concept{margin-top:16px;padding:14px 15px;border-radius:var(--r-sm);
   background:var(--card2);border:1px solid var(--line);

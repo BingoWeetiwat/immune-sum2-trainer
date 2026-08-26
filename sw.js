@@ -1,9 +1,9 @@
-/* Immune Sum II — service worker.
+/* BM33 trainer — service worker (Immune Sum II + Pharmaco Sum I).
    App shell + data are precached so the app opens instantly offline.
    Slides are precached in the background after install, so the first launch is
    fast and the app becomes fully offline within a minute or so. */
 
-const CACHE = 'immune-sum2-96f17556';
+const CACHE = 'bm33-7b2a3fc5';
 
 const SHELL = [
   './',
@@ -11,7 +11,9 @@ const SHELL = [
   'app.css',
   'app.js',
   'data.js',
+  'data_pharm.js',
   'slidelist.js',
+  'slidelist_p.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -39,11 +41,18 @@ self.addEventListener('activate', (e) => {
 async function warmSlides() {
   try {
     const c = await caches.open(CACHE);
-    const res = await c.match('slidelist.js') || await fetch('slidelist.js');
-    const txt = await res.text();
-    const m = txt.match(/window\.SLIDELIST\s*=\s*(\[[\s\S]*?\]);/);
-    if (!m) return;
-    const list = JSON.parse(m[1]);
+    const list = [];
+    for (const [file, key] of [['slidelist.js', 'SLIDELIST'],
+                               ['slidelist_p.js', 'SLIDELIST_P']]) {
+      try {
+        const res = await c.match(file) || await fetch(file);
+        if (!res) continue;
+        const txt = await res.text();
+        const m = txt.match(new RegExp('window\\.' + key + '\\s*=\\s*(\\[[\\s\\S]*?\\]);'));
+        if (m) list.push(...JSON.parse(m[1]));
+      } catch (e) {}
+    }
+    if (!list.length) return;
     // small concurrent batches so we never saturate a phone connection
     for (let i = 0; i < list.length; i += 6) {
       await Promise.all(list.slice(i, i + 6).map(async (u) => {
