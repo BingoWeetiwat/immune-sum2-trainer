@@ -3,7 +3,7 @@
    Slides are precached in the background after install, so the first launch is
    fast and the app becomes fully offline within a minute or so. */
 
-const CACHE = 'bm33-7b2a3fc5';
+const CACHE = 'bm33-83b5dfc1';
 
 const SHELL = [
   './',
