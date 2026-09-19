@@ -8,17 +8,21 @@ var $ = function (s, r) { return (r || document).querySelector(s); };
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
 /* ═══════════════════════════════════════════════ blocks
-   Two subjects live in one app. Their question ids are namespaced at BUILD
-   time (pharmaco ids all start "P|"), so a single flat progress map — and a
-   single synced gist — holds both without any chance of collision, and the
-   immune progress that already exists on the device keeps working untouched. */
+   Three subjects live in one app. Their question ids are namespaced at BUILD
+   time (pharmaco ids start "P|", infectious "I|"), so a single flat progress
+   map — and a single synced gist — holds all three without any chance of
+   collision, and progress that already exists on the device keeps working
+   untouched. Immune ids were never prefixed and must never be. */
 var BLOCKS = [
   { key: 'isum2',  short: 'Immune II',   h1: 'Immune <span>Summative II</span>',
     sub: 'BM33 · L10–L19 · past-paper trainer',
     bank: window.BANK   || [], meta: window.META   || {} },
   { key: 'pharm1', short: 'Pharmaco I',  h1: 'Pharmaco <span>Summative I</span>',
     sub: 'BM33 · L1–L7 · past-paper trainer',
-    bank: window.BANK_P || [], meta: window.META_P || {} }
+    bank: window.BANK_P || [], meta: window.META_P || {} },
+  { key: 'infect1', short: 'Infectious', h1: 'Infectious <span>Summative I</span>',
+    sub: 'BM33 · L1–L14 + Labs · 318 questions',
+    bank: window.BANK_I || [], meta: window.META_I || {} }
 ];
 var BLOCK_BY = {};
 BLOCKS.forEach(function (b) {
@@ -231,6 +235,7 @@ function renderHome() {
   n.dataset.built = '1';
   MODES.forEach(function (m) {
     if (m.id === 'lec') m.d = META.lecBlurb || (META.lecOrder || []).length + ' lecture buckets';
+    if (m.id === 'author' && META.authBlurb) m.d = META.authBlurb;
   });
   n.innerHTML = MODES.map(function (m, i) {
     return '<button class="mode ' + (m.cls || '') + '" data-mode="' + m.id + '" ' +

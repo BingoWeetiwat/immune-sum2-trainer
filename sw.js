@@ -1,9 +1,9 @@
-/* BM33 trainer — service worker (Immune Sum II + Pharmaco Sum I).
+/* BM33 trainer — service worker (Immune Sum II + Pharmaco Sum I + Infectious Sum I).
    App shell + data are precached so the app opens instantly offline.
    Slides are precached in the background after install, so the first launch is
    fast and the app becomes fully offline within a minute or so. */
 
-const CACHE = 'bm33-83b5dfc1';
+const CACHE = 'bm33-c3ed7d0b';
 
 const SHELL = [
   './',
@@ -12,8 +12,10 @@ const SHELL = [
   'app.js',
   'data.js',
   'data_pharm.js',
+  'data_infect.js',
   'slidelist.js',
   'slidelist_p.js',
+  'slidelist_i.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -43,7 +45,8 @@ async function warmSlides() {
     const c = await caches.open(CACHE);
     const list = [];
     for (const [file, key] of [['slidelist.js', 'SLIDELIST'],
-                               ['slidelist_p.js', 'SLIDELIST_P']]) {
+                               ['slidelist_p.js', 'SLIDELIST_P'],
+                               ['slidelist_i.js', 'SLIDELIST_I']]) {
       try {
         const res = await c.match(file) || await fetch(file);
         if (!res) continue;

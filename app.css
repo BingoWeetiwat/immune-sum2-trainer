@@ -67,7 +67,8 @@ input{font:inherit}
 /* ───────────────────────────────────── block switcher */
 .blocktabs{display:flex;gap:4px;margin:2px 16px 0;padding:4px;
   background:var(--card);border:1px solid var(--line);border-radius:99px}
-.btab{flex:1;padding:9px 10px;border-radius:99px;font-size:13.5px;font-weight:600;
+.btab{flex:1;min-width:0;padding:9px 6px;border-radius:99px;font-size:13px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   color:var(--dim);letter-spacing:-.1px;
   transition:color .18s var(--pop),background .18s var(--pop),transform .13s var(--pop)}
 .btab:active{transform:scale(.97)}

@@ -1,6 +1,6 @@
 # BM33 Past-Paper Trainer
 
-Installable offline trainer covering **two BM33 blocks**, switched with the tabs
+Installable offline trainer covering **three BM33 blocks**, switched with the tabs
 at the top of the home screen.
 
 **Live app → https://bingoweetiwat.github.io/immune-sum2-trainer/**
@@ -8,9 +8,11 @@ at the top of the home screen.
 | Block | Scope | Items |
 |---|---|---:|
 | **Immune II** | Human Immune System Summative II — BM33 **L10–L19** | 264 (204 past-paper + 60 author-made) |
-| **Pharmaco I** | Fundamental in Pharmacology Summative I — BM33 **L1–L7** | 212 (172 past-paper + 40 author-made) |
+| **Pharmaco I** | Fundamental in Pharmacology Summative I — BM33 **L1–L7** | 234 (194 past-paper + 40 author-made) |
+| **Infectious** | General Principles of Infectious Diseases Summative I — BM33 **L1–L14 + Labs 1–5** | 318 (162 past-paper + 156 author-made) |
 
-Past-paper items come from BM32, BM31, BM30, BM29, BM28 and the AX legacy bank.
+Past-paper items come from BM32, BM31, BM30, BM29, BM28 and the legacy banks
+(AX for immune/pharmaco, หลักสูตร 54 for infectious).
 **Every past-paper item names the cohort and question number it came from**, and
 the BM33 source slide is shown on the answer card.
 
@@ -27,13 +29,13 @@ same papers are BM33 **Summative II** material and are deliberately excluded.
 
 ## Install on iPhone / iPad
 Open the link in **Safari** → **Share** → **Add to Home Screen**.
-It then launches fullscreen with its own icon and works with no internet — both
-blocks' slides are cached in the background on first launch (about 15 MB).
+It then launches fullscreen with its own icon and works with no internet — all
+three blocks' slides are cached in the background on first launch (about 28 MB).
 
 ## Cross-device sync
 Progress merges question-by-question through a **private GitHub Gist**.
 Tap **☁ Sync setup** and paste a token — once per device. **One token and one
-gist cover both blocks**; their question ids are namespaced so they can never
+gist cover all three blocks**; their question ids are namespaced so they can never
 collide. The token is stored only in that browser's localStorage and is never
 committed here.
 
@@ -46,10 +48,27 @@ committed here.
 ```
 data.js         slidelist.js    slides/      Immune II bank + its slides
 data_pharm.js   slidelist_p.js  slides_p/    Pharmaco I bank + its slides
+data_infect.js  slidelist_i.js  slides_i/    Infectious bank + its slides
 index.html  app.css  app.js  sw.js  manifest.webmanifest   shared shell
 ```
 
-Sources and build scripts live outside this repo, in the two blocks'
-`Resources/` folders. Both builders stamp the same `sw.js` cache name, hashed
-over every shell file **and both data files**, so a change to either block
-reaches installed devices.
+⚠️ **All three builders must hash the same file set** when they restamp the `sw.js`
+cache name, or they stamp different names and thrash each other on every build.
+The set is the ten shell + data files; it is written out identically in
+`build_app2.py`, `build_app.py` and `build_app_infect.py`.
+
+⚠️ `4. Infectious/_mcq_toolkit/letters_lock_infect.json` pins the correct letter of
+every Infectious item that has shipped. The app stores the LETTER an item was
+answered with, and the local trainer builder reshuffles a lecture's letters
+whenever its question count changes. **Never delete that lock.**
+
+Sources and build scripts live outside this repo:
+
+```
+2. Human Immune System/Immune Sum II Past Paper Trainer/Resources/build_app2.py
+3. Pharmaco/Pharmaco Sum I Past Paper Trainer/Resources/build_app.py
+4. Infectious/_mcq_toolkit/build_app_infect.py
+```
+
+All three stamp the same `sw.js` cache name, hashed over every shell file **and
+all three data files**, so a change to any block reaches installed devices.
