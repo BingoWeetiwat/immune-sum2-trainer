@@ -3,7 +3,7 @@
    Slides are precached in the background after install, so the first launch is
    fast and the app becomes fully offline within a minute or so. */
 
-const CACHE = 'bm33-ed9275ef';
+const CACHE = 'bm33-0b78b551';
 
 const SHELL = [
   './',
@@ -76,16 +76,22 @@ self.addEventListener('fetch', (e) => {
   if (url.hostname === 'api.github.com' || url.hostname === 'gist.githubusercontent.com') return;
   if (url.origin !== self.location.origin) return;
 
-  // navigations: network first so an update is picked up, cache as fallback
+  // navigations: network first so an update is picked up, cache as fallback.
+  // Cache the response under ITS OWN url — caching every navigation as
+  // index.html would overwrite the app shell the moment a second page
+  // (practical.html) was opened, and the app would come back as that page
+  // offline.
   if (req.mode === 'navigate') {
     e.respondWith((async () => {
       try {
         const fresh = await fetch(req);
         const c = await caches.open(CACHE);
-        c.put('index.html', fresh.clone());
+        c.put(req, fresh.clone());
         return fresh;
       } catch (err) {
-        return (await caches.match('index.html')) || Response.error();
+        return (await caches.match(req, { ignoreSearch: true }))
+            || (await caches.match('index.html'))
+            || Response.error();
       }
     })());
     return;

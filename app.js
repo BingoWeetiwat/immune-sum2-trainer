@@ -192,7 +192,13 @@ var MODES = [
   { id: 'shuffle', em: '🎲', t: 'Shuffle practice', d: 'Random mix across every paper' },
   { id: 'mock', em: '⏱', t: 'Timed mock exam', d: 'Answers hidden until you submit' },
   { id: 'author', em: '✦', t: 'Author-made drill', d: 'NOT past papers — 5 hard vignettes per lecture', cls: 'author' },
-  { id: 'stats', em: '📊', t: 'Stats', d: 'Per-paper and per-lecture breakdown' }
+  { id: 'stats', em: '📊', t: 'Stats', d: 'Per-paper and per-lecture breakdown' },
+  /* Infectious only — the afternoon practical is a written paper against a
+     photograph, so it lives on its own page rather than in the MCQ runner.
+     The tile is rendered once with the rest and shown or hidden per block. */
+  { id: 'practical', em: '🔬', t: 'Practical exam simulator',
+    d: 'Specimen photo → write the name and stage, against the clock',
+    cls: 'author', only: 'infect1' }
 ];
 
 function renderBlockTabs() {
@@ -249,13 +255,24 @@ function renderHome() {
   $$('.mode', n).forEach(function (b) {
     b.addEventListener('click', function () { haptic(); openMode(b.dataset.mode); });
   });
+  syncBlockOnlyModes();
   updateModeCounts();
 }
+/* tiles that belong to one block only */
+function syncBlockOnlyModes() {
+  MODES.forEach(function (m) {
+    if (!m.only) return;
+    var b = document.querySelector('.mode[data-mode="' + m.id + '"]');
+    if (b) b.style.display = (B && B.key === m.only) ? '' : 'none';
+  });
+}
+
 function updateModeCounts() {
+  syncBlockOnlyModes();
   var map = {
     year: PAST.length, lec: PAST.length, star: starred().length,
     wrong: wrongs().length, shuffle: PAST.length, mock: '',
-    author: AUTH.length, stats: ''
+    author: AUTH.length, stats: '', practical: (window.PRACTICAL_N || '')
   };
   Object.keys(map).forEach(function (k) {
     var el = $('[data-cnt="' + k + '"]');
@@ -265,6 +282,7 @@ function updateModeCounts() {
 
 /* ═════════════════════════════════════════════════ picker */
 function openMode(m) {
+  if (m === 'practical') { location.href = 'practical.html'; return; }
   if (m === 'stats') { renderStats(); show('stats'); return; }
 
   if (m === 'star') {

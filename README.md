@@ -72,3 +72,20 @@ Sources and build scripts live outside this repo:
 
 All three stamp the same `sw.js` cache name, hashed over every shell file **and
 all three data files**, so a change to any block reaches installed devices.
+
+## The practical-exam simulator (Infectious only)
+
+`practical.html` is a second page in this app: **267 photo stations across Labs
+1–5**, where you type the scientific name and stage rather than picking an option,
+against a countdown, and grade yourself against the key points the paper marks.
+It is reached from the 🔬 tile on the Infectious block's home screen.
+
+Its photographs are public-domain **CDC DPDx** figures plus openly-licensed
+**Wikimedia Commons** files, served from `practical_img/` (263 webp, ~6 MB) and
+listed in `practical_list.js` so the service worker warms them like the slides.
+Progress lives under `infect_lab_v1_sim`.
+
+⚠️ The service worker used to cache every navigation as `index.html`. With a
+second page that would have replaced the app shell with the practical page the
+first time it was opened, so navigations are now cached under their own URL with
+`index.html` kept as the offline fallback.
