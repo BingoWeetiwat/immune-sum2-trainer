@@ -9,7 +9,7 @@ at the top of the home screen.
 |---|---|---:|
 | **Immune II** | Human Immune System Summative II — BM33 **L10–L19** | 264 (204 past-paper + 60 author-made) |
 | **Pharmaco I** | Fundamental in Pharmacology Summative I — BM33 **L1–L7** | 234 (194 past-paper + 40 author-made) |
-| **Infectious** | General Principles of Infectious Diseases Summative I — BM33 **L1–L14 + Labs 1–5** | 318 (162 past-paper + 156 author-made) |
+| **Infectious** | General Principles of Infectious Diseases Summative I — BM33 **L1–L14 + Labs 1–5** | 444 (162 past-paper + 282 author-made) |
 
 Past-paper items come from BM32, BM31, BM30, BM29, BM28 and the legacy banks
 (AX for immune/pharmaco, หลักสูตร 54 for infectious).

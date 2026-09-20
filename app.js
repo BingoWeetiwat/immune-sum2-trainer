@@ -21,7 +21,9 @@ var BLOCKS = [
     sub: 'BM33 · L1–L7 · past-paper trainer',
     bank: window.BANK_P || [], meta: window.META_P || {} },
   { key: 'infect1', short: 'Infectious', h1: 'Infectious <span>Summative I</span>',
-    sub: 'BM33 · L1–L14 + Labs · 318 questions',
+    /* counted from the bank, not hard-coded — the block grows whenever
+       build_app_infect.py adds questions and a stale literal would lie. */
+    sub: 'BM33 · L1–L14 + Labs · ' + (window.BANK_I || []).length + ' questions',
     bank: window.BANK_I || [], meta: window.META_I || {} }
 ];
 var BLOCK_BY = {};
