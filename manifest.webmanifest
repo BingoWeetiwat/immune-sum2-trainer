@@ -1,17 +1,33 @@
 {
-  "name": "BM33 Past-Paper Trainer",
+  "name": "BM33 Infectious Trainer",
   "short_name": "BM33",
-  "description": "Past-paper trainers for BM33 — Immune Summative II (L10-L19) and Pharmacology Summative I (L1-L7)",
+  "description": "Infectious Summative I — MCQ dashboard and lecture trainers, synced across devices",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0b1220",
   "theme_color": "#0b1220",
-  "categories": ["education", "medical"],
+  "categories": [
+    "education",
+    "medical"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

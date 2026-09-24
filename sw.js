@@ -1,109 +1,34 @@
-/* BM33 trainer — service worker (Immune Sum II + Pharmaco Sum I + Infectious Sum I).
-   App shell + data are precached so the app opens instantly offline.
-   Slides are precached in the background after install, so the first launch is
-   fast and the app becomes fully offline within a minute or so. */
+/* BM33 Trainer — service worker for the Infectious dashboard site.
+   Network first for everything, so an update is always picked up; each page
+   is cached as it is visited, so the dashboard and any trainer already opened
+   keep working offline. The sync API is never intercepted. */
+const CACHE = 'bm33-site-v1';
+const SHELL = ['./', 'index.html', 'Infectious SUM I — MCQ Dashboard.html', 'manifest.webmanifest',
+               'icons/icon-192.png', 'icons/apple-touch-icon.png'];
 
-const CACHE = 'bm33-679be8ee';
-
-const SHELL = [
-  './',
-  'index.html',
-  'app.css',
-  'app.js',
-  'data_infect.js',
-  'slidelist_i.js',
-  'manifest.webmanifest',
-  'icons/icon-192.png',
-  'icons/icon-512.png',
-  'icons/apple-touch-icon.png'
-];
-
-self.addEventListener('install', (e) => {
-  e.waitUntil((async () => {
-    const c = await caches.open(CACHE);
-    await c.addAll(SHELL);
-    self.skipWaiting();
-  })());
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
-
-self.addEventListener('activate', (e) => {
-  e.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
-    await self.clients.claim();
-    // background-fill the slides once the shell is live
-    warmSlides();
-  })());
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
 });
-
-async function warmSlides() {
-  try {
-    const c = await caches.open(CACHE);
-    const list = [];
-    for (const [file, key] of [['slidelist_i.js', 'SLIDELIST_I']]) {
-      try {
-        const res = await c.match(file) || await fetch(file);
-        if (!res) continue;
-        const txt = await res.text();
-        const m = txt.match(new RegExp('window\\.' + key + '\\s*=\\s*(\\[[\\s\\S]*?\\]);'));
-        if (m) list.push(...JSON.parse(m[1]));
-      } catch (e) {}
-    }
-    if (!list.length) return;
-    // small concurrent batches so we never saturate a phone connection
-    for (let i = 0; i < list.length; i += 6) {
-      await Promise.all(list.slice(i, i + 6).map(async (u) => {
-        if (await c.match(u)) return;
-        try { const r = await fetch(u, { cache: 'no-cache' }); if (r.ok) await c.put(u, r); }
-        catch (e) {}
-      }));
-    }
-  } catch (e) {}
-}
-
-self.addEventListener('fetch', (e) => {
+self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
-
   const url = new URL(req.url);
-  // never intercept the sync API — it must always hit the network
-  if (url.hostname === 'api.github.com' || url.hostname === 'gist.githubusercontent.com') return;
-  if (url.origin !== self.location.origin) return;
-
-  // navigations: network first so an update is picked up, cache as fallback.
-  // Cache the response under ITS OWN url — caching every navigation as
-  // index.html would overwrite the app shell the moment a second page
-  // (practical.html) was opened, and the app would come back as that page
-  // offline.
-  if (req.mode === 'navigate') {
-    e.respondWith((async () => {
-      try {
-        const fresh = await fetch(req);
-        const c = await caches.open(CACHE);
-        c.put(req, fresh.clone());
-        return fresh;
-      } catch (err) {
-        return (await caches.match(req, { ignoreSearch: true }))
-            || (await caches.match('index.html'))
-            || Response.error();
-      }
-    })());
-    return;
-  }
-
-  // everything else: cache first, then network, and cache what comes back
+  if (url.origin !== self.location.origin) return;       // GitHub API goes straight out
   e.respondWith((async () => {
-    const hit = await caches.match(req, { ignoreSearch: true });
-    if (hit) return hit;
     try {
       const fresh = await fetch(req);
       if (fresh.ok && fresh.type === 'basic') {
-        const c = await caches.open(CACHE);
-        c.put(req, fresh.clone());
+        const c = await caches.open(CACHE); c.put(req, fresh.clone());
       }
       return fresh;
     } catch (err) {
-      return Response.error();
+      return (await caches.match(req, { ignoreSearch: true })) ||
+             (req.mode === 'navigate' ? await caches.match('Infectious SUM I — MCQ Dashboard.html') : null) || Response.error();
     }
   })());
 });
