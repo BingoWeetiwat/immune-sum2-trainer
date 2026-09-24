@@ -23,7 +23,7 @@ var BLOCKS = [
   { key: 'infect1', short: 'Infectious', h1: 'Infectious <span>Summative I</span>',
     /* counted from the bank, not hard-coded — the block grows whenever
        build_app_infect.py adds questions and a stale literal would lie. */
-    sub: 'BM33 · L1–L14 + Labs · ' + (window.BANK_I || []).length + ' questions',
+    sub: 'BM33 · L1–L18 + Labs · ' + (window.BANK_I || []).length + ' questions',
     bank: window.BANK_I || [], meta: window.META_I || {} }
 ];
 var BLOCK_BY = {};
@@ -63,6 +63,28 @@ function saveJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 /* progress[qid] = {a:choice, ok:0|1, st:0|1, ts:epochMs, ms:timeSpent, n:attempts} */
 var prog = loadJSON(LS_PROG, {});
 var pmeta = loadJSON(LS_META, { theme: 'dark' });
+
+/* 2026-09-24 rewrite of the authored Infectious items. Each rewritten item
+   carries its original under q.old. The first time THIS device meets such an
+   item it records whether it had already been answered — answered: keep the
+   original wording for good; unanswered: the harder rewrite. The decision is
+   stored, so answering the rewrite later never flips it back. An answer merged
+   from another device that predates the rewrite (ts < q.v2t) counts as answered. */
+var LS_LEG = 'isum2.v2legacy';
+var legacy = loadJSON(LS_LEG, {});
+function applyLegacy() {
+  var changed = false;
+  (window.BANK_I || []).forEach(function (q) {
+    if (!q.old) return;
+    if (legacy[q.id] == null) { legacy[q.id] = (prog[q.id] && prog[q.id].a) ? 1 : 0; changed = true; }
+    if (legacy[q.id] === 1 && !q._leg) {
+      Object.keys(q.old).forEach(function (k) { q[k] = q.old[k]; });
+      q._leg = 1;
+    }
+  });
+  if (changed) saveJSON(LS_LEG, legacy);
+}
+applyLegacy();
 
 var BLANK = { a: null, ok: 0, st: 0, sv: 0, ts: 0, ms: 0, n: 0 };
 function isBlank(p) { return !p || (!p.a && !p.st && !p.sv && !p.n); }
@@ -758,6 +780,12 @@ function merge(remote) {
   Object.keys(remote || {}).forEach(function (id) {
     if (!byIdAll[id]) return;
     var r = remote[id], l = prog[id];
+    var q = byIdAll[id];
+    if (q.old && legacy[id] === 0 && !(l && l.a) && r.a && (r.ts || 0) < (q.v2t || 0)) {
+      legacy[id] = 1;              /* answered elsewhere before the rewrite */
+      if (!q._leg) { Object.keys(q.old).forEach(function (k) { q[k] = q.old[k]; }); q._leg = 1; }
+      saveJSON(LS_LEG, legacy);
+    }
     if (!l || (r.ts || 0) > (l.ts || 0)) { prog[id] = r; changed++; }
   });
   if (changed) { saveJSON(LS_PROG, prog); renderHome(); }
