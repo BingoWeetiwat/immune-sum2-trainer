@@ -778,7 +778,13 @@ function validateToken(t) {
 function merge(remote) {
   var changed = 0;
   Object.keys(remote || {}).forEach(function (id) {
-    if (!byIdAll[id]) return;
+    /* rows for blocks this build no longer loads (Immune, Pharmaco) are kept
+       verbatim, so retiring a block never deletes its synced history */
+    if (!byIdAll[id]) { if (!prog[id]) { prog[id] = remote[id]; changed++; } return; }
+    /* a reset on THIS device stays local: rows older than the reset are not
+       pulled back in (the other device keeps its own copy untouched) */
+    var blk = id.indexOf('I|') === 0 ? 'infect1' : id.indexOf('P|') === 0 ? 'pharm1' : 'immune2';
+    if (pmeta.resetAt && (remote[id].ts || 0) < (pmeta.resetAt[blk] || 0)) return;
     var r = remote[id], l = prog[id];
     var q = byIdAll[id];
     if (q.old && legacy[id] === 0 && !(l && l.a) && r.a && (r.ts || 0) < (q.v2t || 0)) {
@@ -817,14 +823,16 @@ function pull(quiet) {
                            : Promise.resolve(f.content);
     return Promise.resolve(body).then(function (txt) {
       var data = JSON.parse(txt || '{}');
-      var n = merge(data.progress || {});
+      var remote = data.progress || {};
+      var n = merge(remote);
       setStatus('Pulled ' + (new Date()).toLocaleTimeString() +
         (n ? ' — merged ' + n + ' update' + (n === 1 ? '' : 's') : ' — already up to date'), 'good');
       if (!quiet && n) toast('Merged ' + n + ' update' + (n === 1 ? '' : 's') + ' from your other device');
       /* push the merged union back, so anything this device holds that the
          remote lacked also reaches the other devices — this is what makes the
          two sides genuinely converge rather than one overwriting the other */
-      scheduleSync();
+      if (differs(remote)) scheduleSync();
+      return true;
     });
   }).catch(function (e) {
     setStatus('Pull failed — ' + e.message, 'bad');
@@ -836,10 +844,24 @@ function pull(quiet) {
 function push(quiet) {
   if (!tok() || syncing) return Promise.resolve();
   syncing = true;
+  var gid;
   return findOrCreateGist().then(function (id) {
+    gid = id;
+    /* read-merge-write: fold in whatever the other device saved since our
+       last pull BEFORE writing, so a push can never drop its answers */
+    return gh('/gists/' + id + '?t=' + Date.now());
+  }).then(function (g) {
+    var f = g.files && g.files[GIST_FILE];
+    if (!f) return '{}';
+    return f.truncated ? fetch(f.raw_url).then(function (r) { return r.text(); }) : f.content;
+  }).then(function (txt) {
+    var remote = (JSON.parse(txt || '{}').progress) || {};
+    merge(remote);
+    saveJSON(LS_PROG, prog);
+    if (!differs(remote)) return;          /* nothing new to write */
     var files = {};
     files[GIST_FILE] = { content: JSON.stringify({ progress: prog, at: Date.now() }) };
-    return gh('/gists/' + id, { method: 'PATCH', body: JSON.stringify({ files: files }) });
+    return gh('/gists/' + gid, { method: 'PATCH', body: JSON.stringify({ files: files }) });
   }).then(function () {
     setStatus('Synced ' + (new Date()).toLocaleTimeString(), 'good');
   }).catch(function (e) {
@@ -847,10 +869,18 @@ function push(quiet) {
   }).then(function () { syncing = false; });
 }
 
+/* does local progress hold anything the remote copy lacks or has older? */
+function differs(remote) {
+  return Object.keys(prog).some(function (id) {
+    var r = remote[id], l = prog[id];
+    return !r || (l.ts || 0) > (r.ts || 0);
+  });
+}
+
 function scheduleSync() {
   if (!tok()) return;
   clearTimeout(syncTimer);
-  syncTimer = setTimeout(function () { push(true); }, 2500);
+  syncTimer = setTimeout(function () { syncTimer = null; push(true); }, 2500);
 }
 
 $('#btn-sync').addEventListener('click', function () {
@@ -883,9 +913,20 @@ $('#btn-forget').addEventListener('click', function () {
   toast('Token forgotten');
 });
 
-/* pull on open and when returning to the app */
+/* pull on open, when returning to the app, when the network comes back, and
+   every 15 s while the app is on screen — so the other device's answers show
+   up without pressing anything */
 document.addEventListener('visibilitychange', function () {
   if (!document.hidden && tok()) pull(true);
+});
+window.addEventListener('focus', function () { if (tok()) pull(true); });
+window.addEventListener('online', function () { if (tok()) { pull(true); scheduleSync(); } });
+setInterval(function () {
+  if (tok() && !document.hidden && !syncing) pull(true);
+}, 15000);
+/* last chance to save when the app is closed or sent to the background */
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden && tok() && syncTimer) { clearTimeout(syncTimer); syncTimer = null; push(true); }
 });
 
 /* ═════════════════════════════════════════════════ about */
@@ -903,14 +944,15 @@ $('#btn-about').addEventListener('click', function () {
     (META.aboutBody || '') + '<br><br>' +
     'Works fully offline once installed. Progress is stored on this device and, ' +
     'if you connect a token, merged across devices through a private GitHub Gist. ' +
-    'Both blocks share one token and one gist.';
+    'Sync runs by itself: a few seconds after each answer, and every 15 seconds while the app is open.';
   openSheet('sheet-about');
 });
 $('#btn-reset').addEventListener('click', function () {
   if (!confirm('Erase all answers, stars and timings for ' + B.short +
-               ' on this device?\n\nThe other block is not touched.')) return;
+               ' on this device?\n\nYour other device keeps its own copy.')) return;
   Object.keys(byId).forEach(function (id) { delete prog[id]; });
-  saveJSON(LS_PROG, prog); scheduleSync();
+  pmeta.resetAt = pmeta.resetAt || {}; pmeta.resetAt[B.key] = Date.now();
+  saveJSON(LS_PROG, prog); saveJSON(LS_META, pmeta);
   renderHome(); closeSheet('sheet-about'); toast(B.short + ' progress reset');
 });
 

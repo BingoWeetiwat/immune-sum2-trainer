@@ -3,18 +3,14 @@
    Slides are precached in the background after install, so the first launch is
    fast and the app becomes fully offline within a minute or so. */
 
-const CACHE = 'bm33-e5817040';
+const CACHE = 'bm33-679be8ee';
 
 const SHELL = [
   './',
   'index.html',
   'app.css',
   'app.js',
-  'data.js',
-  'data_pharm.js',
   'data_infect.js',
-  'slidelist.js',
-  'slidelist_p.js',
   'slidelist_i.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
@@ -44,9 +40,7 @@ async function warmSlides() {
   try {
     const c = await caches.open(CACHE);
     const list = [];
-    for (const [file, key] of [['slidelist.js', 'SLIDELIST'],
-                               ['slidelist_p.js', 'SLIDELIST_P'],
-                               ['slidelist_i.js', 'SLIDELIST_I']]) {
+    for (const [file, key] of [['slidelist_i.js', 'SLIDELIST_I']]) {
       try {
         const res = await c.match(file) || await fetch(file);
         if (!res) continue;
