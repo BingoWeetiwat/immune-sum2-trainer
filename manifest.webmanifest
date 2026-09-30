@@ -1,7 +1,7 @@
 {
-  "name": "BM33 Infectious Trainer",
-  "short_name": "BM33",
-  "description": "Infectious Summative I — MCQ dashboard and lecture trainers, synced across devices",
+  "name": "Bingo's Exam Prep",
+  "short_name": "Exam Prep",
+  "description": "Bingo's exam hub: Infectious Final (SUM II) and SUM I dashboards, lecture trainers, past papers and lab stations, synced across devices",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
