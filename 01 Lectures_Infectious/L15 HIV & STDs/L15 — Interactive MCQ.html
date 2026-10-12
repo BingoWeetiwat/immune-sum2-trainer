@@ -221,6 +221,32 @@ a{color:var(--cyan);text-decoration:none}
 .sw.un{background:#0f1a2e}
 .sw.cur{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(60,199,244,.45)}
 
+/* study priority (Final trainers, q.pri 1/2/3 — added 2026-10-11): three hues */
+.nq.p1{background:linear-gradient(145deg,rgba(255,77,77,.66),rgba(255,140,66,.40));border-color:#ff7a59;color:#fff3ee}
+.nq.p2{background:linear-gradient(145deg,rgba(255,190,11,.52),rgba(255,226,110,.22));border-color:#e0b23a;color:#fff7dc}
+.nq.p3{background:linear-gradient(145deg,rgba(120,138,162,.26),rgba(71,85,105,.10));border-color:#3a4a60;color:#8395ac}
+.nq.p1.ok,.nq.p2.ok,.nq.p3.ok{box-shadow:inset 0 -5px 0 #34d399}
+.nq.p1.bad,.nq.p2.bad,.nq.p3.bad{box-shadow:inset 0 -5px 0 #fb7185}
+.nq .rk{position:absolute;left:4px;top:2px;font-size:9.5px;font-weight:900;line-height:1;opacity:.95}
+.nq.ok .rk{color:#34d399;text-shadow:0 0 3px #000}.nq.bad .rk{color:#ff4d6d;text-shadow:0 0 3px #000}
+.nq.cur{border-color:var(--cyan)!important;box-shadow:0 0 0 2px rgba(60,199,244,.6)!important;color:var(--cyan2)!important}
+.sw.p1{background:linear-gradient(145deg,rgba(255,77,77,.9),rgba(255,140,66,.6));border-color:#ff7a59}
+.sw.p2{background:linear-gradient(145deg,rgba(255,190,11,.85),rgba(255,226,110,.45));border-color:#e0b23a}
+.sw.p3{background:linear-gradient(145deg,rgba(120,138,162,.5),rgba(71,85,105,.2));border-color:#3a4a60}
+.sw.okb{background:#0f1a2e;box-shadow:inset 0 -4px 0 #34d399}.sw.badb{background:#0f1a2e;box-shadow:inset 0 -4px 0 #fb7185}
+.navsec .nh .pp1{color:#ff9a7a}.navsec .nh .pp2{color:#ffd166}.navsec .nh .pp3{color:#8aa0b8}
+.pill.pri1{color:#ffb39c;border-color:#7a3a2e;background:rgba(255,94,77,.16)}
+.pill.pri2{color:#ffe08a;border-color:#6e5a26;background:rgba(255,196,61,.13)}
+.pill.pri3{color:#9fb0c6;border-color:#2c3a4e;background:rgba(100,116,139,.14)}
+.set.p1 .sn{color:#ff9a7a;border-color:#7a3a2e;background:rgba(255,94,77,.14)}
+.set.p2 .sn{color:#ffd166;border-color:#6e5a26;background:rgba(255,196,61,.12)}
+.set.on.p1{border-color:#ff7a59;box-shadow:0 0 0 1px #ff7a59 inset}
+.set.on.p2{border-color:#e0b347;box-shadow:0 0 0 1px #e0b347 inset}
+.prilegend{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--dim);line-height:1.45}
+.prilegend span{display:flex;align-items:center;gap:8px}
+.prilegend b{color:var(--ink)}
+#mapMode{white-space:nowrap}
+
 /* ---------------- results ---------------- */
 .rbig{font-size:54px;font-weight:900;text-align:center;line-height:1.05;
   background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;
@@ -252,6 +278,29 @@ a{color:var(--cyan);text-decoration:none}
 .markbtn.on{color:var(--gold);border-color:var(--gold)}
 
 /* ---------------- toast / confetti ---------------- */
+/* progress protection (2026-10-12) */
+.safe{border-radius:14px;padding:12px 14px;margin-top:12px;font-size:13.5px;line-height:1.5}
+.safe.bk{background:#13251c;border:1px solid #2f6b4a;color:#bfe8cf}
+.safe.sy{background:#17213a;border:1px solid #33508a;color:#c7d6f2}
+.safe b{color:#fff}
+.safe .btn{margin-top:8px}
+.danger{margin-top:16px;border-top:1px dashed #3a2430;padding-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.danger .dz{font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#a36b78;flex:1}
+.danger .btn{color:#f39aa8;border-color:#5b2a36;font-size:12.5px}
+.rmodal{position:fixed;inset:0;z-index:70;background:rgba(4,7,14,.78);backdrop-filter:blur(6px);
+ display:none;align-items:center;justify-content:center;padding:16px}
+.rmodal.show{display:flex}
+.rmodal .box{background:#1a0f16;border:1px solid #7a2c3d;border-radius:16px;max-width:430px;width:100%;padding:20px;
+ box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.rmodal h3{margin:0 0 8px;color:#ff9aa9;font-size:17px}
+.rmodal p{margin:6px 0;color:#d9c3ca;font-size:13.5px;line-height:1.5}
+.rmodal input{width:100%;box-sizing:border-box;margin:12px 0 4px;padding:11px 12px;border-radius:10px;border:1px solid #6b3443;
+ background:#0e0a10;color:#fff;font-size:16px;letter-spacing:2px;text-align:center}
+.rmodal .row{display:flex;gap:9px;margin-top:12px}
+.rmodal .row .btn{flex:1}
+.rmodal .btn.kill{background:#8f2134;border-color:#b0304a;color:#fff}
+.rmodal .btn.kill[disabled]{opacity:.35;cursor:not-allowed}
+.walkchip{font-size:11.5px}
 .toast{position:fixed;left:50%;top:78px;transform:translate(-50%,-18px);z-index:60;
   background:linear-gradient(135deg,#132038,#1a2a48);border:1px solid var(--line);
   padding:10px 16px;border-radius:14px;font-weight:800;font-size:14px;opacity:0;pointer-events:none;
@@ -279,6 +328,17 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
 <body>
 <canvas id="fx"></canvas>
 <div id="toast" class="toast"></div>
+<div class="rmodal" id="rModal" role="dialog" aria-label="Erase answers">
+  <div class="box">
+    <h3>⚠️ Erase all answers in this lecture?</h3>
+    <p id="rmInfo"></p>
+    <p>★ stars are kept. A backup is saved first, so you can still undo from the menu.</p>
+    <p>Type <b>RESET</b> to confirm.</p>
+    <input id="rmInput" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="type RESET">
+    <div class="row"><button class="btn ghost" id="rmCancel">Keep my progress</button>
+      <button class="btn kill" id="rmGo" disabled>Erase</button></div>
+  </div>
+</div>
 
 <!-- ============ HUD ============ -->
 <div class="hud hidden" id="hud">
@@ -319,9 +379,19 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
       <div class="seg" id="segOrder">
         <div class="opt on" data-order="linear">In order</div>
         <div class="opt" data-order="shuffle">Shuffle</div>
+        <div class="opt hidden" data-order="pri" id="optPri">Priority first</div>
       </div>
 
-      <div class="lbl">Priority tiers</div>
+      <div id="priBox" class="hidden">
+        <div class="lbl">Study priority — what to cut if time runs out</div>
+        <div class="prilegend">
+          <span><i class="sw p1"></i><b>① Do first</b> — repeated / recent past-paper items, lecturer NL items, must-know traps</span>
+          <span><i class="sw p2"></i><b>② Then</b> — solid value once ① is done</span>
+          <span><i class="sw p3"></i><b>③ If time</b> — low-yield detail and repeats owned by another lecture</span>
+        </div>
+      </div>
+
+      <div class="lbl">Question tiers</div>
       <div class="legend">
         <span class="tag mk">Must-know</span><span class="tag hy">High-yield</span>
         <span class="tag sup">Supporting</span><span class="tag pp">Past-paper</span>
@@ -332,8 +402,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
       </div>
       <div style="display:flex;gap:9px;margin-top:9px">
         <a class="btn ghost sm" id="lnkDash" style="flex:1" href="../../Infectious%20SUM%20I%20%E2%80%94%20MCQ%20Dashboard.html">⌂ SUM I Dashboard</a>
-        <button class="btn ghost sm" id="btnReset" style="flex:1">Reset progress (keeps ★)</button>
       </div>
+      <div id="safeCards"></div>
 
       <div class="help">
         <span><span class="kbd">←</span><span class="kbd">→</span> move freely</span>
@@ -341,6 +411,9 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
         <span><span class="kbd">M</span> star</span>
         <span><span class="kbd">G</span> question map</span>
       </div>
+      <div class="help" style="margin-top:6px">Start ▶ keeps every answer you have already given — ≡ Menu pauses, it never ends a run.</div>
+      <div class="danger"><span class="dz">Danger zone</span>
+        <button class="btn ghost sm" id="btnReset">Erase answers…</button></div>
     </div>
   </section>
 
@@ -349,6 +422,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
     <div class="qhead">
       <span class="pill sec1" id="qSec">§1</span>
       <span class="pill" id="qTier">Must-know</span>
+      <span class="pill hidden" id="qPri"></span>
+      <span class="pill hidden walkchip" id="qWalk"></span>
       <span class="pill pos" id="qCounter">1 / 1</span>
     </div>
     <div class="qcard" id="qcard"></div>
@@ -373,14 +448,20 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:45}
   <div class="sheet-in">
     <div class="sheet-head">
       <h3>Question map</h3>
+      <button class="btn sm ghost hidden" id="mapMode" title="Group the map by study priority or by section">⇅ By section</button>
       <button class="btn sm ghost" id="jumpUnans">↷ First unanswered</button>
       <button class="btn sm" id="sheetClose">✕</button>
     </div>
     <div id="navBody"></div>
     <div class="navlegend">
-      <span><i class="sw ok"></i> Correct</span>
-      <span><i class="sw bad"></i> Wrong</span>
-      <span><i class="sw un"></i> Not answered</span>
+      <span class="prionly"><i class="sw p1"></i> ① Do first</span>
+      <span class="prionly"><i class="sw p2"></i> ② Then</span>
+      <span class="prionly"><i class="sw p3"></i> ③ If time</span>
+      <span class="prionly"><i class="sw okb"></i> Correct</span>
+      <span class="prionly"><i class="sw badb"></i> Wrong</span>
+      <span class="nopri"><i class="sw ok"></i> Correct</span>
+      <span class="nopri"><i class="sw bad"></i> Wrong</span>
+      <span class="nopri"><i class="sw un"></i> Not answered</span>
       <span><i class="sw cur"></i> Current</span>
       <span><span style="color:var(--gold)">★</span> Starred</span>
     </div>
@@ -421,7 +502,7 @@ const INFSYNC = (function () {
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k && k.indexOf(PREFIX) === 0 && !/_v2legacy$/.test(k)) out.push(k.slice(PREFIX.length));
+        if (k && k.indexOf(PREFIX) === 0 && !/_(v2legacy|snap)$/.test(k)) out.push(k.slice(PREFIX.length));
       }
     } catch (e) {}
     return out;
@@ -714,7 +795,31 @@ const INFSYNC = (function () {
     setInterval(() => { if (tok() && !document.hidden) cycle(); }, 15000);
   }
 
-  return { stamp, start, button, open, cycle, _mergeIn: mergeIn, _union: union, _local: localPayload };
+  /* ---------- recovery (2026-10-12) ----------
+     A local wipe is remembered in st.clr so the Sync copy cannot resurrect it.
+     recover(key) forgets those clear-marks for one lecture and syncs, so every
+     answer still held in the gist (newer than nothing) merges back in.
+     Resolves to the number of answers gained, or null if the sync failed. */
+  function connected() { return !!tok(); }
+  function cleared(key) {
+    const st = ls.json(PREFIX + key) || {}, a = st.answers || {};
+    return Object.keys(st.clr || {}).filter(q => a[q] == null).length;
+  }
+  function recover(key) {
+    if (!tok()) return Promise.resolve(null);
+    const st = ls.json(PREFIX + key);
+    if (!st) return Promise.resolve(0);
+    const count = o => Object.keys((o && o.answers) || {}).filter(q => o.answers[q] != null).length;
+    const before = count(st);
+    st.clr = {};
+    ls.set(PREFIX + key, JSON.stringify(st));
+    const go = () => cycle(true);
+    return (busy ? new Promise(r => setTimeout(r, 1500)).then(go) : go())
+      .then(ok => ok ? count(ls.json(PREFIX + key)) - before : null);
+  }
+
+  return { stamp, start, button, open, cycle, connected, cleared, recover,
+           _mergeIn: mergeIn, _union: union, _local: localPayload };
 })();
 
 const META  = {"title": "L15 — HIV and STDs", "key": "L15", "tag": "L15", "deck": {"0": "BM33 L15 HIV and STDs (slides)"}, "dashrel": "../..", "v2t": 1790233841838, "n": 39, "n1": 28, "n2": 11, "dataVer": "74b5ba4c6a"};
@@ -746,9 +851,12 @@ const LETTERS = ["A","B","C","D","E"];
 const TIER_LABEL = {MustKnow:"Must-know",HighYield:"High-yield",Supporting:"Supporting",PastPaper:"Past-paper"};
 const TIER_CLASS = {MustKnow:"mk",HighYield:"hy",Supporting:"sup",PastPaper:"pp"};
 const SEC_NAME   = {1:"Authored", 2:"Past-paper"};
+// Study priority (q.pri 1/2/3) — present on the Final trainers built from 2026-10-11.
+const PRI_NAME   = {1:"① Do first", 2:"② Then", 3:"③ If time"};
 
 /* ---------------- state ---------------- */
 let order=[], pos=0, answers={}, marks={}, qMs={};
+let base=[], walk="base", runSrc="";   // base = run as built; walk "pri" = arrows follow ①→②→③
 let streak=0, best=0, xp=0, sessionMs=0;
 let cfg = {set:"all", order:"linear"};
 let view = "menu";                 // menu | quiz | results
@@ -762,11 +870,12 @@ function save(){
   try{
     const o = {
       v:1, dataVer:META.dataVer, title:META.title, tag:META.tag, n:META.n,
-      order,pos,answers,marks,qMs,sessionMs:sessionNow(),
+      order,base,walk,runSrc,pos,answers,marks,qMs,sessionMs:sessionNow(),
       streak,best,xp,cfg,view,t:Date.now()
     };
     INFSYNC.stamp(META.key, o);            // per-answer times for cross-device sync
     localStorage.setItem(LS_KEY, JSON.stringify(o));
+    autoSnap(o);
   }catch(e){}
 }
 /* another device's answers just landed in storage: take them into memory */
@@ -804,6 +913,84 @@ function load(){
 }
 addEventListener("pagehide", save);
 addEventListener("beforeunload", save);
+
+/* ---------------- run order: question order vs priority walk ---------------- */
+function priSorted(list){
+  return list.map((i,n)=>[i,n]).sort((a,b)=>((ALLQ[a[0]].pri||3)-(ALLQ[b[0]].pri||3))||(a[1]-b[1])).map(x=>x[0]);
+}
+function applyWalk(){
+  const cur = order.length ? order[pos] : null;
+  if(!base || !base.length) base = order.slice();
+  order = (walk==="pri" && HASPRI) ? priSorted(base) : base.slice();
+  const p = cur!=null ? order.indexOf(cur) : -1;
+  pos = p>=0 ? p : Math.min(pos, Math.max(0,order.length-1));
+}
+function adopt(s){                       // take a saved run into memory
+  order = s.order||[]; base = (s.base&&s.base.length) ? s.base : order.slice();
+  walk = s.walk || ((s.cfg&&s.cfg.order==="pri") ? "pri" : "base"); runSrc = s.runSrc||"";
+  pos = Math.min(s.pos||0, Math.max(0,order.length-1));
+  answers=s.answers||{}; marks=s.marks||{}; qMs=s.qMs||{};
+  streak=s.streak||0; best=s.best||0; xp=s.xp||0; cfg=s.cfg||cfg; sessionMs=s.sessionMs||0;
+}
+
+/* ---------------- progress protection (2026-10-12) ----------------
+   SNAP_KEY keeps the high-water copy of this lecture's answers: it is rewritten
+   only when the live save has at least as many answers, so nothing that lowers
+   the count (reset, retry, a bad sync) can overwrite it. The menu offers to
+   merge back anything it holds that the live save lacks. */
+const SNAP_KEY = LS_KEY + "_snap";
+let snapN = -1;
+function nAns(a){ return Object.keys(a||{}).filter(k=>a[k]!=null).length; }
+function readSnap(){ try{ return JSON.parse(localStorage.getItem(SNAP_KEY)); }catch(e){ return null; } }
+function writeSnap(o, why){
+  try{
+    localStorage.setItem(SNAP_KEY, JSON.stringify({t:Date.now(), why, answers:o.answers||{}, marks:o.marks||{}, qMs:o.qMs||{}}));
+    snapN = nAns(o.answers);
+  }catch(e){}
+}
+function autoSnap(o){
+  if(snapN<0){ const sn=readSnap(); snapN = sn ? nAns(sn.answers) : 0; }
+  const n = nAns(o.answers);
+  if(n>0 && n>=snapN) writeSnap(o, "auto");
+}
+function snapExtra(){                     // answers in the backup that the live save lacks
+  const sn=readSnap(); if(!sn) return null;
+  const miss = Object.keys(sn.answers||{}).filter(k=>sn.answers[k]!=null && answers[k]==null);
+  return miss.length ? {sn, miss} : null;
+}
+function restoreSnap(){
+  const x = snapExtra(); if(!x) return;
+  x.miss.forEach(k=>{ answers[k]=x.sn.answers[k]; });
+  Object.keys(x.sn.marks||{}).forEach(k=>{ if(x.sn.marks[k]) marks[k]=true; });
+  Object.keys(x.sn.qMs||{}).forEach(k=>{ if((x.sn.qMs[k]||0)>(qMs[k]||0)) qMs[k]=x.sn.qMs[k]; });
+  save(); renderStart(); toast("↺ Restored "+x.miss.length+" answers");
+}
+function renderSafe(){
+  let h="";
+  const x = snapExtra();
+  if(x){
+    const d = new Date(x.sn.t);
+    h += '<div class="safe bk">🛟 <b>Backup found:</b> '+x.miss.length+' answer'+(x.miss.length>1?'s':'')+
+         ' you gave earlier are not in your current progress (backup from '+d.toLocaleDateString()+' '+
+         d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})+').'+
+         '<button class="btn primary sm" id="btnRestore" style="width:100%">↺ Restore them</button></div>';
+  }
+  const nc = INFSYNC.cleared ? INFSYNC.cleared(META.key) : 0;
+  if(nc){
+    h += '<div class="safe sy">☁ <b>'+nc+' answer'+(nc>1?'s were':' was')+' cleared on this device.</b> '+
+         (INFSYNC.connected() ? 'Your Sync copy may still hold them.' : 'Connect ☁ Sync first — your other devices / Sync copy may still hold them.')+
+         '<button class="btn sm" id="btnRecover" style="width:100%"'+(INFSYNC.connected()?'':' disabled')+'>☁ Recover from Sync</button></div>';
+  }
+  el("safeCards").innerHTML = h;
+  if(el("btnRestore")) el("btnRestore").onclick = restoreSnap;
+  if(el("btnRecover")) el("btnRecover").onclick = ()=>{
+    el("btnRecover").disabled = true; el("btnRecover").textContent = "Recovering…";
+    INFSYNC.recover(META.key).then(n=>{
+      pullIntoMemory(); renderStart();
+      toast(n==null ? "Sync failed — try again" : n>0 ? "☁ Recovered "+n+" answers" : "Sync had nothing older to bring back");
+    });
+  };
+}
 
 /* ---------------- timers (wall-clock, drift-free) ---------------- */
 function sessionNow(){ return sessionMs + (runStart!=null ? Date.now()-runStart : 0); }
@@ -846,6 +1033,10 @@ function markCount(){ return Object.keys(marks).filter(k=>marks[k]).length; }
 function idxAll(){ return ALLQ.map((q,i)=>i); }
 function secIdx(n){ return idxAll().filter(i=>ALLQ[i].sec===n); }
 function starIdx(){ return idxAll().filter(i=>marks[i]); }
+const HASPRI = ALLQ.some(q=>q.pri);
+function priIdx(ps){ return idxAll().filter(i=>ps.includes(ALLQ[i].pri)); }
+let mapBy = "pri";
+try { mapBy = localStorage.getItem("infect_mapby") || "pri"; } catch(e){}
 function wrongIdx(){ return idxAll().filter(i=>answers[i]!=null && answers[i]!==ALLQ[i].ans); }
 function statsFor(list){
   const done=list.filter(i=>answers[i]!=null);
@@ -861,26 +1052,38 @@ const SETS = [
   {k:"star", cls:"gold", n:"★",  t:"Starred",    d:"Only the questions you flagged", list:starIdx},
   {k:"wrong",cls:"red",  n:"✕",  t:"Got wrong",  d:"Only the ones you missed", list:wrongIdx}
 ];
+if(HASPRI){
+  SETS.unshift(
+    {k:"p1",  cls:"p1", n:"①",  t:"Do first", d:"The highest-yield third of this lecture", list:()=>priIdx([1])},
+    {k:"p12", cls:"p2", n:"①②", t:"Do first + Then", d:"Tiers ① and ② — everything except the low-yield ③", list:()=>priIdx([1,2])});
+}
 
 function renderStart(){
   el("startTitle").textContent = META.title;
   el("startSub").textContent = META.n+" questions · "+META.n1+" authored · "+META.n2+" past-paper";
+  if(HASPRI){
+    el("priBox").classList.remove("hidden"); el("optPri").classList.remove("hidden");
+    const c = {1:0,2:0,3:0}; ALLQ.forEach(q=>c[q.pri||3]++);
+    el("startSub").textContent += "  ·  ① "+c[1]+" · ② "+c[2]+" · ③ "+c[3];
+  }
+  document.querySelectorAll("#segOrder .opt").forEach(o=>o.classList.toggle("on", o.dataset.order===cfg.order));
 
   const s = load();
   if(s){ marks = s.marks||{}; answers = s.answers||{}; }
 
   // resume card
   const rc = el("resumeCard");
-  if(s && s.order && s.order.length && s.view && s.view!=="menu"){
+  if(s && s.order && s.order.length){
     const done = s.order.filter(i=>(s.answers||{})[i]!=null).length;
     rc.classList.remove("hidden");
-    rc.innerHTML = '<div class="rt">In progress</div>'+
+    rc.innerHTML = '<div class="rt">In progress'+(s.walk==="pri"&&HASPRI?' · following ①→②→③':'')+(s.runSrc?' · '+esc(s.runSrc):'')+'</div>'+
       '<div class="rm">Question '+Math.min((s.pos||0)+1,s.order.length)+' of '+s.order.length+'</div>'+
       '<div class="rs">'+done+' answered · '+fmt(s.sessionMs||0)+' on the clock</div>'+
       '<div class="rbar"><i style="width:'+(100*done/s.order.length)+'%"></i></div>'+
       '<button class="btn primary" id="btnResume" style="width:100%">Resume ▶</button>';
     el("btnResume").onclick = ()=>resume();
   } else rc.classList.add("hidden");
+  renderSafe();
 
   // set cards
   el("setGrid").innerHTML = SETS.map(S=>{
@@ -908,7 +1111,7 @@ function renderStart(){
 }
 
 function buildOrder(){
-  const S = SETS.find(x=>x.k===cfg.set) || SETS[2];
+  const S = SETS.find(x=>x.k===cfg.set) || SETS.find(x=>x.k==="all");
   let idx = S.list().slice();
   if(cfg.order==="shuffle"){
     for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
@@ -917,30 +1120,49 @@ function buildOrder(){
 }
 
 function startFresh(){
+  // 2026-10-12: starting a run NEVER erases answers (it used to wipe them — the
+  // "pressed Menu, lost everything" bug). Erasing is only possible via the
+  // guarded Erase dialog or the explicit Retry buttons on the results screen.
   const s = load();
   marks   = (s && s.marks)   || marks   || {};
   answers = (s && s.answers) || answers || {};
-  order = buildOrder();
-  if(!order.length){ toast("That set is empty"); return; }
-  if(order.length === ALLQ.length){ answers={}; xp=0; best=0; }
-  else { order.forEach(i=>delete answers[i]); xp=(s&&s.xp)||0; best=(s&&s.best)||0; }
-  order.forEach(i=>delete qMs[i]);
-  pos=0; streak=0; sessionMs=0; runStart=null; qStart=null;
+  qMs     = (s && s.qMs)     || qMs     || {};
+  xp=(s&&s.xp)||0; best=(s&&s.best)||0;
+  const b = buildOrder();
+  if(!b.length){ toast("That set is empty"); return; }
+  base = b; order = b.slice(); pos = 0; runSrc = "";
+  walk = (cfg.order==="pri" && HASPRI) ? "pri" : "base";
+  applyWalk();
+  const fu = order.findIndex(i=>answers[i]==null);
+  pos = fu>=0 ? fu : 0;
+  streak=0; sessionMs=0; runStart=null; qStart=null;
+  const kept = order.filter(i=>answers[i]!=null).length;
   save(); enterQuiz();
+  if(kept) toast("Your "+kept+" earlier answers are kept — starting at the first unanswered");
 }
 function resume(){
   const s = load(); if(!s || !s.order || !s.order.length){ startFresh(); return; }
-  order=s.order; pos=Math.min(s.pos||0, s.order.length-1);
-  answers=s.answers||{}; marks=s.marks||{}; qMs=s.qMs||{};
-  streak=s.streak||0; best=s.best||0; xp=s.xp||0; cfg=s.cfg||cfg;
-  sessionMs=s.sessionMs||0; runStart=null; qStart=null;
+  adopt(s); runStart=null; qStart=null;
   enterQuiz();
 }
 function resetProgressKeepStars(){
-  answers={}; qMs={}; streak=0; best=0; xp=0; pos=0; order=[]; sessionMs=0;
+  const s0 = load(); if(s0) writeSnap(s0, "before erase");
+  answers={}; qMs={}; streak=0; best=0; xp=0; pos=0; order=[]; base=[]; walk="base"; runSrc=""; sessionMs=0;
   runStart=null; qStart=null; view="menu";
-  save(); renderStart(); toast("Progress cleared — ★ kept");
+  save(); renderStart(); toast("Answers erased — ★ kept · Restore is on the menu");
 }
+function openReset(){
+  const s = load(); const n = s ? nAns(s.answers) : 0;
+  if(!n){ toast("Nothing to erase"); return; }
+  el("rmInfo").innerHTML = 'This erases <b>'+n+' answer'+(n>1?'s':'')+'</b> in <b>'+esc(META.title)+'</b>.';
+  el("rmInput").value=""; el("rmGo").disabled=true;
+  el("rModal").classList.add("show"); setTimeout(()=>el("rmInput").focus(),50);
+}
+function closeReset(){ el("rModal").classList.remove("show"); }
+el("rmInput").oninput = ()=>{ el("rmGo").disabled = el("rmInput").value.trim()!=="RESET"; };
+el("rmCancel").onclick = closeReset;
+el("rModal").onclick = e=>{ if(e.target===el("rModal")) closeReset(); };
+el("rmGo").onclick = ()=>{ if(el("rmInput").value.trim()!=="RESET") return; closeReset(); resetProgressKeepStars(); };
 function gotoMenu(){
   timersOff(); view="menu"; save();
   closeSheet();
@@ -974,7 +1196,13 @@ function render(){
   const redundant = (q.sec===2 && q.tier==="PastPaper");   // "§2 · Past-paper" already says it
   t.classList.toggle("hidden", redundant);
   if(!redundant){ t.textContent = TIER_LABEL[q.tier]; t.className = "pill tag "+TIER_CLASS[q.tier]; }
+  const pp = el("qPri");
+  if(HASPRI && q.pri){ pp.textContent = PRI_NAME[q.pri]; pp.className = "pill pri"+q.pri; }
+  else pp.className = "pill hidden";
   el("qCounter").textContent = (pos+1)+" / "+order.length;
+  const wc = el("qWalk");
+  if(HASPRI && walk==="pri"){ wc.textContent = runSrc ? "↹ "+runSrc : "↹ ①→②→③ order"; wc.className = "pill walkchip pri"+(q.pri||3); }
+  else wc.className = "pill hidden walkchip";
   el("navInfo").textContent  = (pos+1)+" / "+order.length;
   syncStar();
 
@@ -1122,25 +1350,37 @@ function syncStar(){
 /* ---------------- navigator sheet ---------------- */
 function sheetOpen(){ return el("sheet").classList.contains("show"); }
 function openSheet(){
-  const bySec = {1:[],2:[]};
-  order.forEach((qi,p)=>bySec[ALLQ[qi].sec].push({qi,p}));
+  const byPri = HASPRI && walk==="pri";
+  const groups = byPri ? {1:[],2:[],3:[]} : {1:[],2:[]};
+  order.forEach((qi,p)=>groups[byPri ? (ALLQ[qi].pri||3) : ALLQ[qi].sec].push({qi,p}));
   let h="";
-  [1,2].forEach(sec=>{
-    const rows=bySec[sec]; if(!rows.length) return;
+  Object.keys(groups).forEach(g=>{
+    const rows=groups[g]; if(!rows.length) return;
     const st=statsFor(rows.map(r=>r.qi));
-    h += '<div class="navsec"><div class="nh"><span class="pill sec'+sec+'">§'+sec+' · '+SEC_NAME[sec]+'</span>'+
+    const head = byPri ? '<span class="pill pri'+g+'">'+PRI_NAME[g]+'</span>'
+                       : '<span class="pill sec'+g+'">§'+g+' · '+SEC_NAME[g]+'</span>';
+    h += '<div class="navsec"><div class="nh">'+head+
          '<span class="cnt">'+st.done+' of '+st.n+' answered'+(st.acc!=null?" · "+st.acc+"% correct":"")+'</span></div>'+
          '<div class="ngrid">';
     rows.forEach(r=>{
-      const a=answers[r.qi];
-      const cls = a==null ? "" : (a===ALLQ[r.qi].ans ? "ok":"bad");
-      h += '<button class="nq '+cls+(r.p===pos?" cur":"")+'" data-p="'+r.p+'" title="'+
-           (a==null?'Question '+(r.p+1):esc(ALLQ[r.qi].topic))+'">'+(r.p+1)+(marks[r.qi]?'<span class="sd">★</span>':'')+'</button>';
+      const a=answers[r.qi], q=ALLQ[r.qi];
+      const res = a==null ? "" : (a===q.ans ? "ok":"bad");
+      const pc = (HASPRI && q.pri) ? " p"+q.pri : "";
+      const rk = (pc && res) ? '<span class="rk">'+(res==="ok"?"✓":"✗")+'</span>' : '';
+      h += '<button class="nq '+res+pc+(r.p===pos?" cur":"")+'" data-p="'+r.p+'" title="'+
+           (a==null?'Question '+(r.p+1):esc(q.topic))+(pc?' · '+PRI_NAME[q.pri]:'')+'">'+(r.p+1)+rk+
+           (marks[r.qi]?'<span class="sd">★</span>':'')+'</button>';
     });
     h += '</div></div>';
   });
   el("navBody").innerHTML = h;
   el("navBody").querySelectorAll(".nq").forEach(b=>b.onclick=()=>jumpTo(+b.dataset.p));
+  const mm = el("mapMode");
+  mm.classList.toggle("hidden", !HASPRI);
+  mm.textContent = byPri ? "⇅ Back to question order" : "⇅ Follow priority ①→③";
+  mm.title = byPri ? "Arrows go back to question order" : "Arrows (← →) will walk ① then ② then ③";
+  document.querySelectorAll(".navlegend .prionly").forEach(x=>x.classList.toggle("hidden", !HASPRI));
+  document.querySelectorAll(".navlegend .nopri").forEach(x=>x.classList.toggle("hidden", HASPRI));
   el("sheet").classList.add("show");
 }
 function closeSheet(){ el("sheet").classList.remove("show"); }
@@ -1263,7 +1503,7 @@ function finish(quiet){
   el("rSkip").onclick   = ()=>{
     const sk = order.filter(i=>answers[i]==null);
     if(!sk.length) return;
-    order = sk; pos=0; streak=0; slideDir="right"; save(); enterQuiz();
+    order = sk; base = sk.slice(); walk = "base"; runSrc = ""; pos=0; streak=0; slideDir="right"; save(); enterQuiz();
   };
   el("rMenu").onclick = gotoMenu;
   el("rDash").onclick = gotoDashboard;
@@ -1273,7 +1513,8 @@ function finish(quiet){
 }
 function rerun(list, label){
   if(!list.length) return;
-  order = list.slice();
+  const s0 = load(); if(s0) writeSnap(s0, "before retry");
+  order = list.slice(); base = order.slice(); walk = "base"; runSrc = "";
   list.forEach(i=>{ delete answers[i]; delete qMs[i]; });
   pos=0; streak=0; sessionMs=0; runStart=null; qStart=null; slideDir="right";
   save(); enterQuiz(); toast("Retrying "+list.length+" "+label);
@@ -1281,7 +1522,7 @@ function rerun(list, label){
 
 /* ---------------- wiring ---------------- */
 el("btnStart").onclick = ()=>startFresh();
-el("btnReset").onclick = ()=>resetProgressKeepStars();
+el("btnReset").onclick = openReset;
 el("hMenu").onclick    = gotoMenu;
 el("hDash").onclick    = gotoDashboard;
 el("navPrev").onclick  = ()=>go(-1);
@@ -1290,10 +1531,18 @@ el("navMark").onclick  = toggleMark;
 el("navGrid").onclick  = ()=>sheetOpen()?closeSheet():openSheet();
 el("sheetClose").onclick = closeSheet;
 el("jumpUnans").onclick  = firstUnanswered;
+el("mapMode").onclick = ()=>{
+  walk = walk==="pri" ? "base" : "pri";
+  if(walk==="base") runSrc = "";
+  flushQ(); applyWalk(); qStart = Date.now();
+  save(); render(); openSheet();
+  toast(walk==="pri" ? "← → now follow ① → ② → ③" : "← → back to question order");
+};
 el("sheet").onclick = e=>{ if(e.target===el("sheet")) closeSheet(); };
 
 document.addEventListener("keydown", e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(el("rModal").classList.contains("show")){ if(e.key==="Escape") closeReset(); return; }
   if(sheetOpen() && e.key==="Escape"){ closeSheet(); return; }
   if(view!=="quiz") return;
   const k=e.key;
@@ -1350,6 +1599,15 @@ function deepLinkQ(){
   const i=+m[1];
   return (i>=0 && i<ALLQ.length) ? i : null;
 }
+function deepLinkRun(){                    // #q=12&run=12,40,7&lbl=① Do first  (dashboard list order)
+  const m=/[#&]run=([0-9,]+)/.exec(location.hash||"");
+  if(!m) return null;
+  const seen={}, out=[];
+  m[1].split(",").forEach(x=>{ const i=+x; if(x!=="" && i>=0 && i<ALLQ.length && !seen[i]){ seen[i]=1; out.push(i); } });
+  const l=/[#&]lbl=([^&]*)/.exec(location.hash||"");
+  let lbl=""; try{ lbl = l ? decodeURIComponent(l[1]) : ""; }catch(e){}
+  return out.length ? {list:out, lbl} : null;
+}
 (function boot(){
   INFSYNC.start(ch=>{ if(ch.indexOf(META.key)>=0) pullIntoMemory(); });
   try{
@@ -1362,20 +1620,21 @@ function deepLinkQ(){
   const dq = deepLinkQ();
 
   if(dq!=null){
-    if(s){ order=s.order&&s.order.length?s.order:idxAll(); pos=s.pos||0;
-           answers=s.answers||{}; marks=s.marks||{}; qMs=s.qMs||{};
-           streak=s.streak||0; best=s.best||0; xp=s.xp||0; cfg=s.cfg||cfg; sessionMs=s.sessionMs||0; }
-    else order = idxAll();
-    if(order.indexOf(dq)<0) order = idxAll();
+    const run = deepLinkRun();
+    if(s) adopt(s); else { order = idxAll(); base = order.slice(); }
+    if(run && run.list.indexOf(dq)>=0){
+      // opened from a filtered dashboard list: ← → walk that list, in that order
+      base = run.list; order = run.list.slice(); walk = "pri"; runSrc = "Dashboard: "+(run.lbl||"filtered list");
+      cfg = {set:"dash", order:cfg.order||"linear"};
+    } else if(order.indexOf(dq)<0){ order = idxAll(); base = order.slice(); walk = "base"; runSrc = ""; }
     pos = order.indexOf(dq);
     try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
-    save(); enterQuiz(); toast("→ Jumped from dashboard");
+    save(); enterQuiz();
+    toast(run ? "→ ← → follow your dashboard list ("+order.length+")" : "→ Jumped from dashboard");
     return;
   }
   if(s && s.order && s.order.length && s.view && s.view!=="menu"){
-    order=s.order; pos=Math.min(s.pos||0,s.order.length-1);
-    answers=s.answers||{}; marks=s.marks||{}; qMs=s.qMs||{};
-    streak=s.streak||0; best=s.best||0; xp=s.xp||0; cfg=s.cfg||cfg; sessionMs=s.sessionMs||0;
+    adopt(s);
     if(s.view==="results"){ enterQuiz(); finish(true); }
     else enterQuiz();
   }
