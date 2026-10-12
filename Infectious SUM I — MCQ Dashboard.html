@@ -311,6 +311,11 @@ a{color:var(--cyan);text-decoration:none}
 .rvex.on{display:block;animation:fade .3s}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .rvex .row{display:flex;gap:11px;margin:9px 0;font-size:14.2px;line-height:1.6}
+.rvex .row span{overflow-wrap:anywhere;min-width:0}
+.rvkey{margin:12px 0 4px;padding:11px 13px;border-radius:12px;background:rgba(52,211,153,.08);
+  border:1px solid rgba(52,211,153,.32);font-size:14px;line-height:1.6;color:#d6e6f2;overflow-wrap:anywhere}
+.rvkey .kh{font-weight:800;font-size:12.5px;color:var(--green);margin-bottom:5px}
+.rvkey b{color:#f1f7fb}
 .rvex .row b{flex:0 0 20px;color:var(--dim)}
 .rvex .row.c b{color:var(--green)} .rvex .row.c{color:#cfeee1}
 .rvex .row.w{color:var(--dim)}
@@ -326,6 +331,16 @@ a{color:var(--cyan);text-decoration:none}
 .rvdone p{color:var(--dim);font-size:15px;line-height:1.65;margin:0 0 22px}
 @media(max-width:640px){.rvstem{font-size:16.5px}.rvbody{padding:18px 14px 130px}}
 
+
+/* 2026-10-12 mobile stability — the Year / Lecture chip strips were inline spans of
+   nowrap chips (1,389 px wide on a phone), so the whole page slid sideways. */
+.pprow>span:not(.lbl){display:flex;flex-wrap:wrap;gap:7px;flex:1 1 220px;min-width:0}
+html{overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@supports (overflow:clip){html,body{overflow-x:clip}}
+html,body{overscroll-behavior-x:none;overscroll-behavior-y:contain}
+body{touch-action:pan-y pinch-zoom}
+img,canvas,video{max-width:100%}
+input,select,textarea{font-size:16px}
 </style>
 </head>
 <body>
@@ -1389,6 +1404,8 @@ function toast(msg){
 }
 function esc(s){ return (s==null?"":(""+s))
   .replace(/&(?![a-z#0-9]+;)/gi,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+/* explanations may carry <b>/<i>/<sub>/<sup>/<br> from the builders — allow just those */
+function rich(s){ return esc(s).replace(/&lt;(\/?)(b|i|sub|sup|br)&gt;/gi,"<$1$2>"); }
 
 document.querySelectorAll("#filters .f").forEach(f=>f.onclick=()=>{
   filter=f.dataset.f; syncFilterUI(); renderQuestions();
@@ -1652,7 +1669,8 @@ function drawRev(){
   if(answered){
     const ok = RV.tried[id]===q.a;
     ex = '<div class="rvverd '+(ok?"c":"w")+'">'+(ok?"\u2713 Correct":"\u2715 Incorrect \u2014 answer is "+q.a)+'</div>'+
-         LETTERS.map(L=>'<div class="row '+(L===q.a?"c":"w")+'"><b>'+L+'.</b><span>'+esc((q.e&&q.e[L])||"")+'</span></div>').join("")+
+         LETTERS.map(L=>'<div class="row '+(L===q.a?"c":"w")+'"><b>'+L+'.</b><span>'+rich((q.e&&q.e[L])||"")+'</span></div>').join("")+
+         (q.k ? '<div class="rvkey"><div class="kh">\uD83D\uDD11 Key point \u2014 why the answer is '+q.a+'</div>'+rich(q.k)+'</div>' : "")+
          (q.c ? '<div class="rvcite">\uD83D\uDCC4 '+esc(q.c)+'</div>' : "")+
          '<div class="rvcite">\uD83D\uDCD6 '+esc(q.lec.title)+' \u00b7 '+(q.s===2?"past-paper":"authored")+
             ' \u00b7 '+esc(TIER_LABEL[q.t]||q.t)+(q.tp?" \u00b7 "+esc(q.tp):"")+'</div>';
