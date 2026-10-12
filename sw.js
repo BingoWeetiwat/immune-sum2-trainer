@@ -2,7 +2,7 @@
    Network first for everything, so an update is always picked up; each page
    is cached as it is visited, so the dashboard and any trainer already opened
    keep working offline. The sync API is never intercepted. */
-const CACHE = 'bm33-site-v2';
+const CACHE = 'bm33-site-v3';
 const SHELL = ['./', 'index.html', 'Infectious SUM II — MCQ Dashboard.html', 'Infectious SUM I — MCQ Dashboard.html', 'manifest.webmanifest',
                'icons/icon-192.png', 'icons/apple-touch-icon.png'];
 
@@ -21,7 +21,9 @@ self.addEventListener('fetch', e => {
   if (url.origin !== self.location.origin) return;       // GitHub API goes straight out
   e.respondWith((async () => {
     try {
-      const fresh = await fetch(req);
+      // no-cache = always revalidate with the server (ETag), never trust the
+      // browser's 10-minute HTTP cache — an update must show on the next open
+      const fresh = await fetch(req, { cache: 'no-cache' });
       if (fresh.ok && fresh.type === 'basic') {
         const c = await caches.open(CACHE); c.put(req, fresh.clone());
       }
