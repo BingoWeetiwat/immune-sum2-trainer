@@ -2,8 +2,8 @@
    Network first for everything, so an update is always picked up; each page
    is cached as it is visited, so the dashboard and any trainer already opened
    keep working offline. The sync API is never intercepted. */
-const CACHE = 'bm33-site-v3';
-const SHELL = ['./', 'index.html', 'Infectious SUM II — MCQ Dashboard.html', 'Infectious SUM I — MCQ Dashboard.html', 'manifest.webmanifest',
+const CACHE = 'bm33-site-v4';
+const SHELL = ['./', 'index.html', 'Skin/Skin SUM I — MCQ Dashboard.html', 'Infectious SUM II — MCQ Dashboard.html', 'Infectious SUM I — MCQ Dashboard.html', 'manifest.webmanifest',
                'icons/icon-192.png', 'icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -30,7 +30,7 @@ self.addEventListener('fetch', e => {
       return fresh;
     } catch (err) {
       return (await caches.match(req, { ignoreSearch: true })) ||
-             (req.mode === 'navigate' ? await caches.match('Infectious SUM II — MCQ Dashboard.html') : null) || Response.error();
+             (req.mode === 'navigate' ? await caches.match('Skin/Skin SUM I — MCQ Dashboard.html') : null) || Response.error();
     }
   })());
 });
