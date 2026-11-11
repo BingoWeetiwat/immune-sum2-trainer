@@ -2,7 +2,7 @@
    Network first for everything, so an update is always picked up; each page
    is cached as it is visited, so the dashboard and any trainer already opened
    keep working offline. The sync API is never intercepted. */
-const CACHE = 'bm33-site-v4';
+const CACHE = 'bm33-site-v5';
 const SHELL = ['./', 'index.html', 'Skin/Skin SUM I — MCQ Dashboard.html', 'Infectious SUM II — MCQ Dashboard.html', 'Infectious SUM I — MCQ Dashboard.html', 'manifest.webmanifest',
                'icons/icon-192.png', 'icons/apple-touch-icon.png'];
 
